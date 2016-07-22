@@ -16,11 +16,12 @@ Imports System.Windows.Documents
 Imports System.Windows.Input
 Imports System.Windows.Media.Imaging
 Imports System.Windows.Navigation
+Imports System.Collections.ObjectModel
 
 
 
 Class MainWindow
-
+    Dim Seuil2 As New ObservableCollection(Of GraphPoint)
     Dim Hauteurfen, B As Integer
     Dim marge As Integer
     Dim Timeline As New List(Of Line)
@@ -40,6 +41,7 @@ Class MainWindow
     Dim arrayList, arrayList1, arraylist2, arraylist3, arraylist4 As New List(Of List(Of Double))
     Dim ListofArray As New List(Of List(Of List(Of Double)))
     Dim liste_voie As New List(Of VoieEEG)
+    Dim graph As New List(Of ObservableCollection(Of GraphPoint))
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
 
         B = windows1.ActualWidth
@@ -274,15 +276,22 @@ Class MainWindow
         Dim Itembande As Integer
         Itembande = comboBox1.SelectedIndex
         Dim Nbinterval As Integer = 150
+        If Seuil2.Count > 0 Then
+            Seuil2.Clear()
+            graph.Clear()
+        End If
         For iVoie = 1 To 11
             If liste_voie(iVoie - 1).Interval.Count > 0 Then
                 For itemps As Integer = 1 To Nbinterval
                     Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
                 Next
                 liste_voie(iVoie - 1).Interval.Clear()
-            End If
 
+            End If
+            Dim Serie As New ObservableCollection(Of GraphPoint)
+            graph.Add(Serie)
             For itemps As Integer = 1 To Nbinterval
+                Serie.Add((New GraphPoint() With {.PxNum = itemps, .Puissance_spectrale = ListofArray(Itembande)(iVoie - 1)(itemps)}))
                 Dim Intervall = New Rectangle()
                 liste_voie(iVoie - 1).Interval.Add(Intervall)
                 liste_voie(iVoie - 1).Interval(itemps - 1).Height = ListofArray(Itembande)(iVoie - 1)(itemps)
@@ -295,6 +304,39 @@ Class MainWindow
                 Canvas.SetTop(Intervall, liste_voie(iVoie - 1).Vert_pos + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
             Next
         Next
+        Dim Deb As Int32
+        Deb = Convert.ToInt32(textBoxSeuil.Text)
+        Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
+        Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count, .Puissance_spectrale = Deb}))
+        graph.Add(Seuil2)
+        Tracer()
+    End Sub
+
+    Private Sub Tracer()
+        Seuil1.DataContext = graph(11)
+        Seuil1.Background = Brushes.Black
+        Fp2line.DataContext = graph(0)
+        Fp2line.Background = liste_voie(0).Color
+        C4line.DataContext = graph(1)
+        C4line.Background = liste_voie(1).Color
+        F8line.DataContext = graph(2)
+        F8line.Background = liste_voie(2).Color
+        T6line.DataContext = graph(3)
+        T6line.Background = liste_voie(3).Color
+        O2line.DataContext = graph(4)
+        O2line.Background = liste_voie(4).Color
+        Czline.DataContext = graph(5)
+        Czline.Background = liste_voie(5).Color
+        Fp1line.DataContext = graph(6)
+        Fp1line.Background = liste_voie(6).Color
+        C3line.DataContext = graph(7)
+        C3line.Background = liste_voie(7).Color
+        F7line.DataContext = graph(8)
+        F7line.Background = liste_voie(8).Color
+        T5line.DataContext = graph(9)
+        T5line.Background = liste_voie(9).Color
+        O1line.DataContext = graph(10)
+        O1line.Background = liste_voie(10).Color
     End Sub
     Private Sub Panneau_Commande()
         Boutonchoix.Content = "Choisir un fichier excel"

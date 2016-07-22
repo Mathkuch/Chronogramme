@@ -21,52 +21,54 @@
         <Toolkit:Chart Name="MyChart" 
                    VerticalAlignment="Top" 
                    Height="320"
-                   Width="500" Margin="32,0,263,0" Padding="2,0,20,0" BorderBrush="#FFF7F7F7">
+                   Width="500" Margin="32,0,263,0" Padding="2,0,20,0" BorderBrush="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
             <Toolkit:Chart.PlotAreaStyle>
                 <Style TargetType="Grid">
                     <Setter Property="Background" Value="Transparent"/>
                 </Style>
+                
+                
             </Toolkit:Chart.PlotAreaStyle>
             <Toolkit:Chart.Template>
-                    <ControlTemplate TargetType="{x:Type Toolkit:Chart}">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <datavis:Title Content="{TemplateBinding Title}" Style="{TemplateBinding TitleStyle}" />
+                <ControlTemplate TargetType="{x:Type Toolkit:Chart}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <datavis:Title Content="{TemplateBinding Title}" Style="{TemplateBinding TitleStyle}" />
                             <chartingprimitives:EdgePanel Name="ChartArea" Style="{TemplateBinding ChartAreaStyle}" Grid.Row="1" Margin="0,15,0,15">
                                 <Grid Panel.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}" />
                                 <Border Panel.ZIndex="10" BorderBrush="#FF919191" BorderThickness="1" />
                             </chartingprimitives:EdgePanel>
                         </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Toolkit:Chart.Template>
-            
+                    </Border>
+                </ControlTemplate>
+            </Toolkit:Chart.Template>
             <Toolkit:Chart.Axes>
                 <!-- Shared horizontal axis -->
                 <Toolkit:LinearAxis
                             Orientation="X"
                             Title="temps en secondes"
-                            Interval="250"
-                            Minimum="0"
-                            Maximum="1500"
                             ShowGridLines="True"/>
                 <Toolkit:LinearAxis
                                 Orientation="Y"
                                 Title="Puissance spectrale"
-                                Minimum="0"
-                                Maximum="65535"
-                                Interval="8000"
                                 ShowGridLines="False"/>
             </Toolkit:Chart.Axes>
-
-            <Toolkit:LineSeries  DependentValuePath="Puissance spectrale" 
-                             IndependentValuePath="PxNum" 
-                             ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}" 
-                             IsSelectionEnabled="True" Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="Seuil1"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" />
+            <Toolkit:LineSeries x:Name="Fp2line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="C4line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}" Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="F8line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="T6line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}" Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="O2line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}" Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="Czline"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="Fp1line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="C3line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}" Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="F7line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="T5line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
+            <Toolkit:LineSeries x:Name="O1line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True"/>
         </Toolkit:Chart>
     </Canvas>
 </Window>

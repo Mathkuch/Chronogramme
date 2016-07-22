@@ -22,7 +22,6 @@
         br.Add(Brushes.DodgerBlue)
         br.Add(Brushes.Blue)
         br.Add(Brushes.DarkSlateBlue)
-
         Item = i
         Hor_pos = 20
         Vert_pos = 50 + ((Hauteurfen - margebasse) / 11) * (i - 1)
@@ -33,7 +32,6 @@
         label.FontSize = 14
         label.FontWeight = FontWeights.Bold
         Label1 = label
-
     End Sub
 
 End Class
