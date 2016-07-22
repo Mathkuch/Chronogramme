@@ -6,7 +6,6 @@ Imports System.Windows.Media
 Imports System.Windows.Shapes
 Imports System.Threading
 Imports System.Windows.Threading
-Imports Excel = Microsoft.Office.Interop.Excel
 Imports System.ComponentModel
 Imports System.Collections.Generic
 Imports System.Linq
@@ -16,14 +15,11 @@ Imports System.Windows.Documents
 Imports System.Windows.Input
 Imports System.Windows.Media.Imaging
 Imports System.Windows.Navigation
-Imports OxyPlot
-Imports OxyPlot.Series
 Imports System.Collections
 
 
 
 Class MainWindow
-    Private mmodel As PlotModel
     Dim Hauteurfen As Integer
     Dim marge As Integer
     Dim Timeline As New List(Of Line)
@@ -106,7 +102,6 @@ Class MainWindow
             textBox1.Text = nOFD.FileName
             readExcelFile()
         End If
-        Graph42.Visibility = Visibility.Visible
         MsgBox(nC3Array.Count)
     End Sub
     Private Sub readExcelFile()
@@ -322,30 +317,10 @@ Class MainWindow
         Canvas.SetTop(Seuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75)
         Canvas.SetTop(textBoxSeuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75)
         Canvas.SetLeft(textBoxSeuil, 20 + 140 + 20)
-        Grid1.Height = marge - 25
-        Grid1.Width = windows1.ActualWidth / 3
-        Graph42.Width = windows1.ActualWidth / 3
-        Canvas.SetTop(Grid1, ActualHeight - marge + 25)
-        Canvas.SetLeft(Grid1, windows1.ActualWidth - Grid1.Width)
     End Sub
 
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
     End Sub
-    Private Sub Graph()
-        Dim series1 = New LineSeries()
-        series1.Title = "Seuil"
-        series1.Points.Add(New DataPoint(0, 10))
-        series1.Points.Add(New DataPoint(1200, 10))
-    End Sub
-    Property Model() As PlotModel
-        Get
-            Return mmodel
-        End Get
-        Set(value As PlotModel)
-            mmodel = value
-        End Set
-    End Property
-
 End Class
 

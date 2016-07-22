@@ -7,9 +7,7 @@
         xmlns:local="clr-namespace:Chronogramme"
     x:Name="windows1"
     mc:Ignorable="d"
-     xmlns:oxy="clr-namespace:OxyPlot;assembly=OxyPlot"
-    xmlns:oxywpf="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf" SourceInitialized="Window_SourceInitialized_1"
-    ResizeMode="CanMinimize" WindowState="Maximized" WindowStartupLocation="CenterScreen"    >
+    ResizeMode="CanMinimize" WindowState="Maximized" WindowStartupLocation="CenterScreen">
     <Canvas x:Name="Canvas1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,-8,5">
         <TextBox x:Name="textBox1" Height="30" Canvas.Left="682" TextWrapping="Wrap" Text="TextBox" Canvas.Top="755" Width="557" IsEnabled="False"/>
         <Button x:Name="Boutonchoix" Content="Button" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="166" Canvas.Left="153" Canvas.Top="620"/>
@@ -17,20 +15,5 @@
         <Button x:Name="Boutonchrono" Content="Faire le Chronogramme" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="150" Canvas.Left="348" Canvas.Top="616"/>
         <TextBox x:Name="textBoxSeuil" Height="27" Canvas.Left="725" TextWrapping="Wrap" Text="0" Canvas.Top="620" Width="48"/>
         <Label x:Name="Seuil" Content="Filtre bas de puissance :" Height="27" Canvas.Left="599" Canvas.Top="530" Width="140"/>
-        <Grid x:Name="Grid1" Height="305" Canvas.Left="764" Canvas.Top="450" Width="508">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0*"/>
-                <ColumnDefinition Width="494*"/>
-                <ColumnDefinition Width="13*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <oxy:Plot x:Name="Courbes" Title="Puissance spectrale en fonction du temps" LegendPlacement="Outside" LegendPosition="RightTop" LegendOrientation="Vertical" Visibility="Hidden" BorderBrush="Black" Background="{x:Null}" Grid.ColumnSpan="2">
-                <oxywpf:LineSeries x:Name="PR1" Color="Red" Title="PR1" DataFieldX="Temps" DataFieldY="Mesure1" ItemsSource="{Binding Mesures}" ></oxywpf:LineSeries>
-                <oxywpf:LineSeries x:Name="PR2" Color="Blue"  Title="PR2" DataFieldX="Temps" DataFieldY="Mesure2" ItemsSource="{Binding Mesures}" ></oxywpf:LineSeries>
-                <oxywpf:LineSeries x:Name="DB1" Color="Green"  Title="DB1" DataFieldX="Temps" DataFieldY="Mesure3" ItemsSource="{Binding Mesures}" ></oxywpf:LineSeries>
-            </oxy:Plot>
-        </Grid>
-        <Grid x:Name="Grid2" Height="74" Canvas.Left="455" Canvas.Top="360" Width="99"/>
     </Canvas>
-
 </Window>
