@@ -6,6 +6,7 @@ Imports System.Windows.Media
 Imports System.Windows.Shapes
 Imports System.Threading
 Imports System.Windows.Threading
+Imports Excel = Microsoft.Office.Interop.Excel
 Imports System.ComponentModel
 Imports System.Collections.Generic
 Imports System.Linq
@@ -15,12 +16,12 @@ Imports System.Windows.Documents
 Imports System.Windows.Input
 Imports System.Windows.Media.Imaging
 Imports System.Windows.Navigation
-Imports System.Collections
 
 
 
 Class MainWindow
-    Dim Hauteurfen As Integer
+
+    Dim Hauteurfen, B As Integer
     Dim marge As Integer
     Dim Timeline As New List(Of Line)
     Dim temps = {"0s", "100s", "200s", "300s", "400s", "500s", "600s", "700s", "800s", "900s", "1000s", "1100s", "1200s", "1300s", "1400s"}
@@ -40,7 +41,7 @@ Class MainWindow
     Dim ListofArray As New List(Of List(Of List(Of Double)))
     Dim liste_voie As New List(Of VoieEEG)
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
-        Dim B As Integer
+
         B = windows1.ActualWidth
         Hauteurfen = windows1.ActualHeight
         marge = 450
@@ -317,8 +318,11 @@ Class MainWindow
         Canvas.SetTop(Seuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75)
         Canvas.SetTop(textBoxSeuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75)
         Canvas.SetLeft(textBoxSeuil, 20 + 140 + 20)
+        MyChart.Width = B / 2 - 40
+        MyChart.Height = marge - 55
+        Canvas.SetTop(MyChart, (((Hauteurfen - marge) / 11) * 11 + 25))
+        Canvas.SetLeft(MyChart, (B / 4) * 2)
     End Sub
-
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
     End Sub

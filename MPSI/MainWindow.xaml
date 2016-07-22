@@ -1,19 +1,72 @@
-﻿<Window 
-    x:Class="MainWindow"
+﻿<Window
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Chronogramme"
+        xmlns:Toolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
+        xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    x:Class="MainWindow"
     x:Name="windows1"
     mc:Ignorable="d"
-    ResizeMode="CanMinimize" WindowState="Maximized" WindowStartupLocation="CenterScreen">
+    ResizeMode="CanMinimize" WindowState="Maximized" WindowStartupLocation="CenterScreen" Foreground="Black">
     <Canvas x:Name="Canvas1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,-8,5">
         <TextBox x:Name="textBox1" Height="30" Canvas.Left="682" TextWrapping="Wrap" Text="TextBox" Canvas.Top="755" Width="557" IsEnabled="False"/>
         <Button x:Name="Boutonchoix" Content="Button" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="166" Canvas.Left="153" Canvas.Top="620"/>
         <ComboBox x:Name="comboBox1" Height="30" Canvas.Left="208" Canvas.Top="851" Width="200"/>
         <Button x:Name="Boutonchrono" Content="Faire le Chronogramme" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="150" Canvas.Left="348" Canvas.Top="616"/>
         <TextBox x:Name="textBoxSeuil" Height="27" Canvas.Left="725" TextWrapping="Wrap" Text="0" Canvas.Top="620" Width="48"/>
-        <Label x:Name="Seuil" Content="Filtre bas de puissance :" Height="27" Canvas.Left="599" Canvas.Top="530" Width="140"/>
+        <Label x:Name="Seuil" Content="Filtre bas de puissance :" Height="27" Canvas.Left="606" Canvas.Top="465" Width="140"/>
+        <Toolkit:Chart Name="MyChart" 
+                   VerticalAlignment="Top" 
+                   Height="320"
+                   Width="500" Margin="32,0,263,0" Padding="2,0,20,0" BorderBrush="#FFF7F7F7">
+            <Toolkit:Chart.PlotAreaStyle>
+                <Style TargetType="Grid">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Toolkit:Chart.PlotAreaStyle>
+            <Toolkit:Chart.Template>
+                    <ControlTemplate TargetType="{x:Type Toolkit:Chart}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <datavis:Title Content="{TemplateBinding Title}" Style="{TemplateBinding TitleStyle}" />
+                            <chartingprimitives:EdgePanel Name="ChartArea" Style="{TemplateBinding ChartAreaStyle}" Grid.Row="1" Margin="0,15,0,15">
+                                <Grid Panel.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}" />
+                                <Border Panel.ZIndex="10" BorderBrush="#FF919191" BorderThickness="1" />
+                            </chartingprimitives:EdgePanel>
+                        </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Toolkit:Chart.Template>
+            
+            <Toolkit:Chart.Axes>
+                <!-- Shared horizontal axis -->
+                <Toolkit:LinearAxis
+                            Orientation="X"
+                            Title="temps en secondes"
+                            Interval="250"
+                            Minimum="0"
+                            Maximum="1500"
+                            ShowGridLines="True"/>
+                <Toolkit:LinearAxis
+                                Orientation="Y"
+                                Title="Puissance spectrale"
+                                Minimum="0"
+                                Maximum="65535"
+                                Interval="8000"
+                                ShowGridLines="False"/>
+            </Toolkit:Chart.Axes>
+
+            <Toolkit:LineSeries  DependentValuePath="Puissance spectrale" 
+                             IndependentValuePath="PxNum" 
+                             ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}" 
+                             IsSelectionEnabled="True" Grid.IsSharedSizeScope="True"/>
+        </Toolkit:Chart>
     </Canvas>
 </Window>
