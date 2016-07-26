@@ -277,7 +277,9 @@ Class MainWindow
         Dim Maxi As Integer
         Dim tinterval As Integer
         Dim Itembande As Integer
-        Somme = 0
+        Dim ISeuil As Integer
+
+        ISeuil = Convert.ToInt32(textBoxSeuil.Text)
         Maxi = 0
         tinterval = Convert.ToInt32(nbint.Text)
         Itembande = comboBox1.SelectedIndex
@@ -285,8 +287,9 @@ Class MainWindow
         Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, 10)
         For xtab As Integer = 0 To 10
             For imoy As Integer = 1 To Nbinterval
+                Somme = 0
                 For itot = 0 To (tinterval - 1)
-                    Somme = Somme + ListofArray(Itembande)(xtab)(imoy * tinterval + itot
+                    Somme = Somme + ListofArray(Itembande)(xtab)((imoy * tinterval) + itot)
                 Next
                 tableau(imoy, xtab) = Int(Somme / tinterval)
                 If Maxi < Int(Somme / tinterval) Then
@@ -316,7 +319,11 @@ Class MainWindow
                 Serie.Add((New GraphPoint() With {.PxNum = itemps, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
                 Dim Intervall = New Rectangle()
                 liste_voie(iVoie - 1).Interval.Add(Intervall)
-                liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 60) / Maxi
+                If tableau(itemps, iVoie - 1) > ISeuil Then
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 60) / Maxi
+                Else
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Height = 0
+                End If
                 liste_voie(iVoie - 1).Interval(itemps - 1).Width = (Lfenetre * 15 / Nbinterval) - 1.5
                 liste_voie(iVoie - 1).Interval(itemps - 1).Stroke = liste_voie(iVoie - 1).Color
                 liste_voie(iVoie - 1).Interval(itemps - 1).StrokeThickness = 2
