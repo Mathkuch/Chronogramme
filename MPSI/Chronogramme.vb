@@ -17,6 +17,8 @@ Imports System.Windows.Input
 Imports System.Windows.Media.Imaging
 Imports System.Windows.Navigation
 Imports System.Collections.ObjectModel
+Imports System.Math
+
 
 
 
@@ -108,27 +110,29 @@ Class MainWindow
         MsgBox(nC3Array.Count)
     End Sub
     Private Sub readExcelFile()
+        Dim Loca As Integer
         Dim nApp As Excel.Application
         Dim nWorkbook As Excel.Workbook
         Dim nWorksheet As Excel.Worksheet
         nApp = New Excel.Application
+        Loca = 0
         nWorkbook = nApp.Workbooks.Open(textBox1.Text)
         nWorksheet = nWorkbook.Worksheets("P D")
         Dim nRange As Excel.Range = nWorksheet.UsedRange
         Dim nArray(,) As Object = nRange.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize As Integer = nArray.GetUpperBound(0)
         For i As Integer = 2 To nSize
-            nO1Array.Add(nArray(i, 15))
-            nT5Array.Add(nArray(i, 16))
-            nC3Array.Add(nArray(i, 17))
-            nF7Array.Add(nArray(i, 18))
-            nFp1Array.Add(nArray(i, 19))
-            nCzArray.Add(nArray(i, 20))
-            nO2array.Add(nArray(i, 21))
-            nT6Array.Add(nArray(i, 22))
-            nC4Array.Add(nArray(i, 23))
-            nF8Array.Add(nArray(i, 24))
-            nFp2Array.Add(nArray(i, 25))
+            nO1Array.Add(nArray(i, Loca + 1))
+            nT5Array.Add(nArray(i, Loca + 2))
+            nC3Array.Add(nArray(i, Loca + 3))
+            nF7Array.Add(nArray(i, Loca + 4))
+            nFp1Array.Add(nArray(i, Loca + 5))
+            nCzArray.Add(nArray(i, Loca + 6))
+            nO2array.Add(nArray(i, Loca + 7))
+            nT6Array.Add(nArray(i, Loca + 8))
+            nC4Array.Add(nArray(i, Loca + 9))
+            nF8Array.Add(nArray(i, Loca + 10))
+            nFp2Array.Add(nArray(i, Loca + 11))
         Next
         arrayList.Add(nFp2Array)
         arrayList.Add(nF8Array)
@@ -147,17 +151,17 @@ Class MainWindow
         Dim nArray1(,) As Object = nRange1.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize1 As Integer = nArray.GetUpperBound(0)
         For i As Integer = 2 To nSize1
-            nO1Array1.Add(nArray1(i, 15))
-            nT5Array1.Add(nArray1(i, 16))
-            nC3Array1.Add(nArray1(i, 17))
-            nF7Array1.Add(nArray1(i, 18))
-            nFp1Array1.Add(nArray1(i, 19))
-            nCzArray1.Add(nArray1(i, 20))
-            nO2array1.Add(nArray1(i, 21))
-            nT6Array1.Add(nArray1(i, 22))
-            nC4Array1.Add(nArray1(i, 23))
-            nF8Array1.Add(nArray1(i, 24))
-            nFp2Array1.Add(nArray1(i, 25))
+            nO1Array1.Add(nArray1(i, Loca + 1))
+            nT5Array1.Add(nArray1(i, Loca + 2))
+            nC3Array1.Add(nArray1(i, Loca + 3))
+            nF7Array1.Add(nArray1(i, Loca + 4))
+            nFp1Array1.Add(nArray1(i, Loca + 5))
+            nCzArray1.Add(nArray1(i, Loca + 6))
+            nO2array1.Add(nArray1(i, Loca + 7))
+            nT6Array1.Add(nArray1(i, Loca + 8))
+            nC4Array1.Add(nArray1(i, Loca + 9))
+            nF8Array1.Add(nArray1(i, Loca + 10))
+            nFp2Array1.Add(nArray1(i, Loca + 11))
         Next
         arrayList1.Add(nFp2Array1)
         arrayList1.Add(nF8Array1)
@@ -176,17 +180,17 @@ Class MainWindow
         Dim nArray2(,) As Object = nRange2.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize2 As Integer = nArray.GetUpperBound(0)
         For i As Integer = 2 To nSize2
-            nO1Array2.Add(nArray2(i, 15))
-            nT5Array2.Add(nArray2(i, 16))
-            nC3Array2.Add(nArray2(i, 17))
-            nF7Array2.Add(nArray2(i, 18))
-            nFp1Array2.Add(nArray2(i, 19))
-            nCzArray2.Add(nArray2(i, 20))
-            nO2array2.Add(nArray2(i, 21))
-            nT6Array2.Add(nArray2(i, 22))
-            nC4Array2.Add(nArray2(i, 23))
-            nF8Array2.Add(nArray2(i, 24))
-            nFp2Array2.Add(nArray2(i, 25))
+            nO1Array2.Add(nArray2(i, Loca + 1))
+            nT5Array2.Add(nArray2(i, Loca + 2))
+            nC3Array2.Add(nArray2(i, Loca + 3))
+            nF7Array2.Add(nArray2(i, Loca + 4))
+            nFp1Array2.Add(nArray2(i, Loca + 5))
+            nCzArray2.Add(nArray2(i, Loca + 6))
+            nO2array2.Add(nArray2(i, Loca + 7))
+            nT6Array2.Add(nArray2(i, Loca + 8))
+            nC4Array2.Add(nArray2(i, Loca + 9))
+            nF8Array2.Add(nArray2(i, Loca + 10))
+            nFp2Array2.Add(nArray2(i, Loca + 11))
         Next
         arraylist2.Add(nFp2Array2)
         arraylist2.Add(nF8Array2)
@@ -205,17 +209,17 @@ Class MainWindow
         Dim nArray3(,) As Object = nRange3.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize3 As Integer = nArray.GetUpperBound(0)
         For i As Integer = 2 To nSize3
-            nO1Array3.Add(nArray3(i, 15))
-            nT5Array3.Add(nArray3(i, 16))
-            nC3Array3.Add(nArray3(i, 17))
-            nF7Array3.Add(nArray3(i, 18))
-            nFp1Array3.Add(nArray3(i, 19))
-            nCzArray3.Add(nArray3(i, 20))
-            nO2array3.Add(nArray3(i, 21))
-            nT6Array3.Add(nArray3(i, 22))
-            nC4Array3.Add(nArray3(i, 23))
-            nF8Array3.Add(nArray3(i, 24))
-            nFp2Array3.Add(nArray3(i, 25))
+            nO1Array3.Add(nArray3(i, Loca + 1))
+            nT5Array3.Add(nArray3(i, Loca + 2))
+            nC3Array3.Add(nArray3(i, Loca + 3))
+            nF7Array3.Add(nArray3(i, Loca + 4))
+            nFp1Array3.Add(nArray3(i, Loca + 5))
+            nCzArray3.Add(nArray3(i, Loca + 6))
+            nO2array3.Add(nArray3(i, Loca + 7))
+            nT6Array3.Add(nArray3(i, Loca + 8))
+            nC4Array3.Add(nArray3(i, Loca + 9))
+            nF8Array3.Add(nArray3(i, Loca + 10))
+            nFp2Array3.Add(nArray3(i, Loca + 11))
         Next
         arraylist3.Add(nFp2Array3)
         arraylist3.Add(nF8Array3)
@@ -234,17 +238,17 @@ Class MainWindow
         Dim narray4(,) As Object = nRange4.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize4 As Integer = nArray.GetUpperBound(0)
         For i As Integer = 2 To nSize4
-            nO1Array4.Add(narray4(i, 15))
-            nT5Array4.Add(narray4(i, 16))
-            nC3Array4.Add(narray4(i, 17))
-            nF7Array4.Add(narray4(i, 18))
-            nFp1Array4.Add(narray4(i, 19))
-            nCzArray4.Add(narray4(i, 20))
-            nO2array4.Add(narray4(i, 21))
-            nT6Array4.Add(narray4(i, 22))
-            nC4Array4.Add(narray4(i, 23))
-            nF8Array4.Add(narray4(i, 24))
-            nFp2Array4.Add(narray4(i, 25))
+            nO1Array4.Add(narray4(i, Loca + 1))
+            nT5Array4.Add(narray4(i, Loca + 2))
+            nC3Array4.Add(narray4(i, Loca + 3))
+            nF7Array4.Add(narray4(i, Loca + 4))
+            nFp1Array4.Add(narray4(i, Loca + 5))
+            nCzArray4.Add(narray4(i, Loca + 6))
+            nO2array4.Add(narray4(i, Loca + 7))
+            nT6Array4.Add(narray4(i, Loca + 8))
+            nC4Array4.Add(narray4(i, Loca + 9))
+            nF8Array4.Add(narray4(i, Loca + 10))
+            nFp2Array4.Add(narray4(i, Loca + 11))
         Next
         arraylist4.Add(nFp2Array4)
         arraylist4.Add(nF8Array4)
@@ -269,13 +273,32 @@ Class MainWindow
         chrono()
     End Sub
     Private Sub chrono()
+        Dim Somme As Double
+        Dim Maxi As Integer
+        Dim tinterval As Integer
+        Dim Itembande As Integer
+        Somme = 0
+        Maxi = 0
+        tinterval = Convert.ToInt32(nbint.Text)
+        Itembande = comboBox1.SelectedIndex
+        Dim Nbinterval As Integer = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
+        Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, 10)
+        For xtab As Integer = 0 To 10
+            For imoy As Integer = 1 To Nbinterval
+                For itot = 0 To (tinterval - 1)
+                    Somme = Somme + ListofArray(Itembande)(xtab)(imoy * tinterval + itot
+                Next
+                tableau(imoy, xtab) = Int(Somme / tinterval)
+                If Maxi < Int(Somme / tinterval) Then
+                    Maxi = Int(Somme / tinterval)
+                End If
+            Next
+        Next
+        MsgBox(Maxi)
         If textBox1.Text = "Fichier Excel de travail" Then
             MsgBox("Merci de choisir un fichier Excel avant de demander le chronogramme")
             Exit Sub
         End If
-        Dim Itembande As Integer
-        Itembande = comboBox1.SelectedIndex
-        Dim Nbinterval As Integer = 150
         If Seuil2.Count > 0 Then
             Seuil2.Clear()
             graph.Clear()
@@ -286,15 +309,14 @@ Class MainWindow
                     Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
                 Next
                 liste_voie(iVoie - 1).Interval.Clear()
-
             End If
             Dim Serie As New ObservableCollection(Of GraphPoint)
             graph.Add(Serie)
             For itemps As Integer = 1 To Nbinterval
-                Serie.Add((New GraphPoint() With {.PxNum = itemps, .Puissance_spectrale = ListofArray(Itembande)(iVoie - 1)(itemps)}))
+                Serie.Add((New GraphPoint() With {.PxNum = itemps, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
                 Dim Intervall = New Rectangle()
                 liste_voie(iVoie - 1).Interval.Add(Intervall)
-                liste_voie(iVoie - 1).Interval(itemps - 1).Height = ListofArray(Itembande)(iVoie - 1)(itemps)
+                liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 60) / Maxi
                 liste_voie(iVoie - 1).Interval(itemps - 1).Width = (Lfenetre * 15 / Nbinterval) - 1.5
                 liste_voie(iVoie - 1).Interval(itemps - 1).Stroke = liste_voie(iVoie - 1).Color
                 liste_voie(iVoie - 1).Interval(itemps - 1).StrokeThickness = 2
@@ -337,6 +359,7 @@ Class MainWindow
         T5line.Background = liste_voie(9).Color
         O1line.DataContext = graph(10)
         O1line.Background = liste_voie(10).Color
+
     End Sub
     Private Sub Panneau_Commande()
         Boutonchoix.Content = "Choisir un fichier excel"
@@ -357,16 +380,22 @@ Class MainWindow
         Canvas.SetTop(comboBox1, (((Hauteurfen - marge) / 11) * 11 + 25 + 30))
         textBox1.Text = "Fichier Excel de travail"
         Canvas.SetLeft(Seuil, 20)
-        Canvas.SetTop(Seuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75)
-        Canvas.SetTop(textBoxSeuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75)
+        Canvas.SetTop(Seuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 85)
+        Canvas.SetTop(textBoxSeuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 85)
         Canvas.SetLeft(textBoxSeuil, 20 + 140 + 20)
         MyChart.Width = B / 2 - 40
         MyChart.Height = marge - 55
         Canvas.SetTop(MyChart, (((Hauteurfen - marge) / 11) * 11 + 25))
         Canvas.SetLeft(MyChart, (B / 4) * 2)
+        Canvas.SetLeft(labelduree, 20)
+        Canvas.SetTop(labelduree, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55)
+        Canvas.SetLeft(nbint, 20 + labelduree.ActualWidth)
+        Canvas.SetTop(nbint, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55)
     End Sub
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
+
     End Sub
+
 End Class
 
