@@ -23,15 +23,15 @@ Imports System.Math
 
 
 Class MainWindow
+    Dim Nbinterval As Integer
     Dim Seuil2 As New ObservableCollection(Of GraphPoint)
     Dim Hauteurfen, B As Integer
     Dim marge As Integer
     Dim Timeline As New List(Of Line)
-    Dim temps = {"0s", "100s", "200s", "300s", "400s", "500s", "600s", "700s", "800s", "900s", "1000s", "1100s", "1200s", "1300s", "1400s"}
+    Dim temps As String()
     Dim listtemp As New List(Of Label)
     Dim Lfenetre As Integer
     Dim Vert(11) As Integer
-    Dim Interval1 As New List(Of Rectangle)
     Dim Br As New List(Of Brush)
     'Puissance
     '''données Excel
@@ -45,7 +45,6 @@ Class MainWindow
     Dim liste_voie As New List(Of VoieEEG)
     Dim graph As New List(Of ObservableCollection(Of GraphPoint))
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
-
         B = windows1.ActualWidth
         Hauteurfen = windows1.ActualHeight
         marge = 450
@@ -80,14 +79,15 @@ Class MainWindow
         Next
         ' lignes représentant le temps /100s
         For iline As Integer = 1 To 15
+
             Dim ligne As New Line
             Dim label1 As New Label
             listtemp.Add(label1)
             Canvas1.Children.Add(listtemp(iline - 1))
             Canvas.SetTop(label1, 0)
+            'B taille de la fenêtre
             Lfenetre = (B - 70 - liste_voie(2 - 1).Label1.ActualWidth) / 15
             Canvas.SetLeft(label1, 65 + (Lfenetre * (iline - 1)))
-            listtemp(iline - 1).Content = temps(iline - 1)
             Timeline.Add(ligne)
             Timeline(iline - 1).Stroke = Brushes.LightSteelBlue
             Timeline(iline - 1).X1 = 70 + (Lfenetre * (iline - 1))
@@ -107,7 +107,6 @@ Class MainWindow
             textBox1.Text = nOFD.FileName
             readExcelFile()
         End If
-        MsgBox(nC3Array.Count)
     End Sub
     Private Sub readExcelFile()
         Dim Loca As Integer
@@ -115,9 +114,9 @@ Class MainWindow
         Dim nWorkbook As Excel.Workbook
         Dim nWorksheet As Excel.Worksheet
         nApp = New Excel.Application
-        Loca = 0
+        Loca = 1
         nWorkbook = nApp.Workbooks.Open(textBox1.Text)
-        nWorksheet = nWorkbook.Worksheets("P D")
+        nWorksheet = nWorkbook.Worksheets("P D (2)")
         Dim nRange As Excel.Range = nWorksheet.UsedRange
         Dim nArray(,) As Object = nRange.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize As Integer = nArray.GetUpperBound(0)
@@ -146,7 +145,7 @@ Class MainWindow
         arrayList.Add(nT5Array)
         arrayList.Add(nO1Array)
 
-        nWorksheet = nWorkbook.Worksheets("P T")
+        nWorksheet = nWorkbook.Worksheets("P T (2)")
         Dim nRange1 As Excel.Range = nWorksheet.UsedRange
         Dim nArray1(,) As Object = nRange1.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize1 As Integer = nArray.GetUpperBound(0)
@@ -175,7 +174,7 @@ Class MainWindow
         arrayList1.Add(nT5Array1)
         arrayList1.Add(nO1Array1)
 
-        nWorksheet = nWorkbook.Worksheets("P A")
+        nWorksheet = nWorkbook.Worksheets("P A (2)")
         Dim nRange2 As Excel.Range = nWorksheet.UsedRange
         Dim nArray2(,) As Object = nRange2.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize2 As Integer = nArray.GetUpperBound(0)
@@ -204,7 +203,7 @@ Class MainWindow
         arraylist2.Add(nT5Array2)
         arraylist2.Add(nO1Array2)
 
-        nWorksheet = nWorkbook.Worksheets("P B")
+        nWorksheet = nWorkbook.Worksheets("P B (2)")
         Dim nRange3 As Excel.Range = nWorksheet.UsedRange
         Dim nArray3(,) As Object = nRange3.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize3 As Integer = nArray.GetUpperBound(0)
@@ -233,7 +232,7 @@ Class MainWindow
         arraylist3.Add(nT5Array3)
         arraylist3.Add(nO1Array3)
 
-        nWorksheet = nWorkbook.Worksheets("P G")
+        nWorksheet = nWorkbook.Worksheets("P G (2)")
         Dim nRange4 As Excel.Range = nWorksheet.UsedRange
         Dim narray4(,) As Object = nRange4.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize4 As Integer = nArray.GetUpperBound(0)
@@ -278,12 +277,27 @@ Class MainWindow
         Dim tinterval As Integer
         Dim Itembande As Integer
         Dim ISeuil As Integer
-
+        Dim Coef As Double
+        temps = {0 & "s", Floor(nC3Array.Count / 15) & "s", Floor((2 * nC3Array.Count) / 15) & "s", Floor((3 * nC3Array.Count) / 15) & "s", Floor((4 * nC3Array.Count) / 15) & "s", Floor((5 * nC3Array.Count) / 15) & "s", Floor((6 * nC3Array.Count) / 15) & "s", Floor((7 * nC3Array.Count) / 15) & "s", Floor((8 * nC3Array.Count) / 15) & "s", Floor((9 * nC3Array.Count) / 15) & "s", Floor((10 * nC3Array.Count) / 15) & "s", Floor((11 * nC3Array.Count) / 15) & "s", Floor((12 * nC3Array.Count) / 15) & "s", Floor((13 * nC3Array.Count) / 15) & "s", Floor((14 * nC3Array.Count) / 15) & "s"}
+        For itime As Integer = 1 To 15
+            listtemp(itime - 1).Content = temps(itime - 1)
+        Next
         ISeuil = Convert.ToInt32(textBoxSeuil.Text)
         Maxi = 0
         tinterval = Convert.ToInt32(nbint.Text)
         Itembande = comboBox1.SelectedIndex
-        Dim Nbinterval As Integer = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
+        If Nbinterval <> 0 Then
+            For iVoie = 1 To 11
+                For itemps As Integer = 1 To Nbinterval
+                    Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
+                Next
+                liste_voie(iVoie - 1).Interval.Clear()
+
+            Next
+            Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
+        Else
+            Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
+        End If
         Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, 10)
         For xtab As Integer = 0 To 10
             For imoy As Integer = 1 To Nbinterval
@@ -297,7 +311,6 @@ Class MainWindow
                 End If
             Next
         Next
-        MsgBox(Maxi)
         If textBox1.Text = "Fichier Excel de travail" Then
             MsgBox("Merci de choisir un fichier Excel avant de demander le chronogramme")
             Exit Sub
@@ -307,36 +320,41 @@ Class MainWindow
             graph.Clear()
         End If
         For iVoie = 1 To 11
-            If liste_voie(iVoie - 1).Interval.Count > 0 Then
-                For itemps As Integer = 1 To Nbinterval
-                    Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
-                Next
-                liste_voie(iVoie - 1).Interval.Clear()
-            End If
             Dim Serie As New ObservableCollection(Of GraphPoint)
             graph.Add(Serie)
+            Select Case tinterval
+                Case 1
+                    Coef = 0.5
+                Case 2 To 4
+                    Coef = 0.3
+                Case 5 To 9
+                    Coef = 0.15
+                Case Else
+                    Coef = 0.05
+            End Select
             For itemps As Integer = 1 To Nbinterval
-                Serie.Add((New GraphPoint() With {.PxNum = itemps, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
+                Serie.Add((New GraphPoint() With {.PxNum = itemps * tinterval, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
                 Dim Intervall = New Rectangle()
                 liste_voie(iVoie - 1).Interval.Add(Intervall)
                 If tableau(itemps, iVoie - 1) > ISeuil Then
-                    liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 60) / Maxi
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 100) / Maxi
                 Else
                     liste_voie(iVoie - 1).Interval(itemps - 1).Height = 0
                 End If
-                liste_voie(iVoie - 1).Interval(itemps - 1).Width = (Lfenetre * 15 / Nbinterval) - 1.5
+                'liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt((Lfenetre * 15 / Nbinterval)) - 1.5
+                liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt(((Lfenetre * 15) / Nbinterval) - Coef * CInt((Lfenetre * 15 / Nbinterval)))
                 liste_voie(iVoie - 1).Interval(itemps - 1).Stroke = liste_voie(iVoie - 1).Color
                 liste_voie(iVoie - 1).Interval(itemps - 1).StrokeThickness = 2
                 liste_voie(iVoie - 1).Interval(itemps - 1).Fill = liste_voie(iVoie - 1).Color
                 Canvas1.Children.Add(liste_voie(iVoie - 1).Interval(itemps - 1))
-                Canvas.SetLeft(Intervall, 70 + Lfenetre * 15 / Nbinterval * (itemps - 1))
+                Canvas.SetLeft(Intervall, 70 + CInt((Lfenetre * 15 / Nbinterval) * (itemps - 1) + Coef * CInt((Lfenetre * 15 / Nbinterval))))
                 Canvas.SetTop(Intervall, liste_voie(iVoie - 1).Vert_pos + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
             Next
         Next
         Dim Deb As Int32
         Deb = Convert.ToInt32(textBoxSeuil.Text)
         Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
-        Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count, .Puissance_spectrale = Deb}))
+        Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = Deb}))
         graph.Add(Seuil2)
         Tracer()
     End Sub
