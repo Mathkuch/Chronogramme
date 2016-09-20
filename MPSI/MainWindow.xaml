@@ -22,7 +22,7 @@
         <Button x:Name="Boutonchoix" Content="Button" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="166" Canvas.Left="153" Canvas.Top="620"/>
         <ComboBox x:Name="comboBox1" Height="30" Canvas.Left="208" Canvas.Top="851" Width="200"/>
         <Button x:Name="Boutonchrono" Content="Faire le Chronogramme" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="150" Canvas.Left="348" Canvas.Top="616"/>
-        <TextBox x:Name="textBoxSeuil" Height="27" Canvas.Left="725" TextWrapping="Wrap" Text="0" Canvas.Top="620" Width="48"/>
+        <TextBox x:Name="textBoxSeuil" Height="27" Canvas.Left="725" TextWrapping="Wrap" Text="0" Canvas.Top="620" Width="86"/>
         <Label x:Name="Seuil" Content="Filtre bas de puissance :" Height="27" Canvas.Left="606" Canvas.Top="465" Width="140"/>
         <Toolkit:Chart Name="MyChart" 
                    VerticalAlignment="Top" 
@@ -74,7 +74,10 @@
             <Toolkit:LineSeries x:Name="T5line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
             <Toolkit:LineSeries x:Name="O1line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
         </Toolkit:Chart>
-        <TextBox x:Name="nbint" Height="30" Canvas.Left="153" TextWrapping="Wrap" Text="5" Canvas.Top="397" Width="30"/>
+        <TextBox x:Name="nbint" Height="30" Canvas.Left="153" TextWrapping="Wrap" Text="1" Canvas.Top="397" Width="30"/>
         <Label x:Name="labelduree" Content="Durée de l'interval en seconde" Height="30" Canvas.Left="319" Canvas.Top="397" Width="179" IsEnabled="False"/>
+        <Button x:Name="buttonimp" Content="imprimer la fenêtre" Height="26" Canvas.Left="-121" Canvas.Top="569" Width="158"/>
+        <Button x:Name="buttonchange" Content="Changer de fichier" Height="27" Canvas.Left="-235" Canvas.Top="465" Width="172"/>
+        <CheckBox x:Name="checkBox" Content="CheckBox" Canvas.Left="-333" Canvas.Top="371"/>
     </Canvas>
 </Window>

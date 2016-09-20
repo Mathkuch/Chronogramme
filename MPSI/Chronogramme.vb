@@ -1,106 +1,35 @@
-﻿Imports Microsoft.VisualBasic
-Imports System
-Imports System.Windows
-Imports System.Windows.Controls
-Imports System.Windows.Media
-Imports System.Windows.Shapes
-Imports System.Threading
-Imports System.Windows.Threading
+﻿
 Imports Excel = Microsoft.Office.Interop.Excel
-Imports System.ComponentModel
-Imports System.Collections.Generic
-Imports System.Linq
-Imports System.Text
-Imports System.Windows.Data
-Imports System.Windows.Documents
-Imports System.Windows.Input
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Navigation
 Imports System.Collections.ObjectModel
 Imports System.Math
-
-
-
+Imports System.Drawing.Printing
+Imports System.Printing
 
 Class MainWindow
-    Dim Nbinterval As Integer
+    Dim Nbinterval, Hauteurfen, B, marge, Lfenetre, Vert(11) As Integer
     Dim Seuil2 As New ObservableCollection(Of GraphPoint)
-    Dim Hauteurfen, B As Integer
-    Dim marge As Integer
     Dim Timeline As New List(Of Line)
-    Dim temps As String()
     Dim listtemp As New List(Of Label)
-    Dim Lfenetre As Integer
-    Dim Vert(11) As Integer
     Dim Br As New List(Of Brush)
     'Puissance
     '''données Excel
-    Dim nO1Array, nT5Array, nC3Array, nF7Array, nFp1Array, nCzArray, nO2array, nT6Array, nC4Array, nF8Array, nFp2Array As New List(Of Double)
-    Dim nO1Array1, nT5Array1, nC3Array1, nF7Array1, nFp1Array1, nCzArray1, nO2array1, nT6Array1, nC4Array1, nF8Array1, nFp2Array1 As New List(Of Double)
-    Dim nO1Array2, nT5Array2, nC3Array2, nF7Array2, nFp1Array2, nCzArray2, nO2array2, nT6Array2, nC4Array2, nF8Array2, nFp2Array2 As New List(Of Double)
-    Dim nO1Array3, nT5Array3, nC3Array3, nF7Array3, nFp1Array3, nCzArray3, nO2array3, nT6Array3, nC4Array3, nF8Array3, nFp2Array3 As New List(Of Double)
-    Dim nO1Array4, nT5Array4, nC3Array4, nF7Array4, nFp1Array4, nCzArray4, nO2array4, nT6Array4, nC4Array4, nF8Array4, nFp2Array4 As New List(Of Double)
-    Dim arrayList, arrayList1, arraylist2, arraylist3, arraylist4 As New List(Of List(Of Double))
     Dim ListofArray As New List(Of List(Of List(Of Double)))
     Dim liste_voie As New List(Of VoieEEG)
     Dim graph As New List(Of ObservableCollection(Of GraphPoint))
+    Dim prd As New PrintDocument()
+
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
-        B = windows1.ActualWidth
-        Hauteurfen = windows1.ActualHeight
-        marge = 450
-        ' Initialisation des voie
-        Dim Fp2 As New VoieEEG(1, Hauteurfen, marge)
-        Dim C4 As New VoieEEG(2, Hauteurfen, marge)
-        Dim f8 As New VoieEEG(3, Hauteurfen, marge)
-        Dim T6 As New VoieEEG(4, Hauteurfen, marge)
-        Dim O2 As New VoieEEG(5, Hauteurfen, marge)
-        Dim cz As New VoieEEG(6, Hauteurfen, marge)
-        Dim fp1 As New VoieEEG(7, Hauteurfen, marge)
-        Dim c3 As New VoieEEG(8, Hauteurfen, marge)
-        Dim f7 As New VoieEEG(9, Hauteurfen, marge)
-        Dim t5 As New VoieEEG(10, Hauteurfen, marge)
-        Dim o1 As New VoieEEG(11, Hauteurfen, marge)
-        liste_voie.Add(Fp2)
-        liste_voie.Add(C4)
-        liste_voie.Add(f8)
-        liste_voie.Add(T6)
-        liste_voie.Add(O2)
-        liste_voie.Add(cz)
-        liste_voie.Add(fp1)
-        liste_voie.Add(c3)
-        liste_voie.Add(f7)
-        liste_voie.Add(t5)
-        liste_voie.Add(o1)
-
-        For i As Integer = 1 To 11
-            Canvas1.Children.Add(liste_voie(i - 1).Label1)
-            Canvas.SetTop(liste_voie(i - 1).Label1, liste_voie(i - 1).Vert_pos)
-            Canvas.SetLeft(liste_voie(i - 1).Label1, liste_voie(i - 1).Hor_pos)
-        Next
-        ' lignes représentant le temps /100s
-        For iline As Integer = 1 To 15
-
-            Dim ligne As New Line
-            Dim label1 As New Label
-            listtemp.Add(label1)
-            Canvas1.Children.Add(listtemp(iline - 1))
-            Canvas.SetTop(label1, 0)
-            'B taille de la fenêtre
-            Lfenetre = (B - 70 - liste_voie(2 - 1).Label1.ActualWidth) / 15
-            Canvas.SetLeft(label1, 65 + (Lfenetre * (iline - 1)))
-            Timeline.Add(ligne)
-            Timeline(iline - 1).Stroke = Brushes.LightSteelBlue
-            Timeline(iline - 1).X1 = 70 + (Lfenetre * (iline - 1))
-            Timeline(iline - 1).X2 = 70 + (Lfenetre * (iline - 1))
-            Timeline(iline - 1).Y1 = 40
-            Timeline(iline - 1).Y2 = (Hauteurfen - marge) + 25
-            Timeline(iline - 1).StrokeThickness = 0.5
-            Canvas1.Children.Add(Timeline(iline - 1))
-        Next
+        comboBox1.Items.Add("Bande Delta")
+        comboBox1.Items.Add("Bande Theta")
+        comboBox1.Items.Add("Bande Alpha")
+        comboBox1.Items.Add("Bande Beta")
+        Initialiser()
         '''''Bouton pour injecter le fichier Excel
-        Panneau_Commande()
     End Sub
     Private Sub Boutonchoix_Click(sender As Object, e As RoutedEventArgs) Handles Boutonchoix.Click
+        Choice()
+    End Sub
+    Private Sub Choice()
         Dim nOFD As New Microsoft.Win32.OpenFileDialog()
         Dim nResultOFD As Nullable(Of Boolean) = nOFD.ShowDialog()
         If nResultOFD = True Then
@@ -109,6 +38,12 @@ Class MainWindow
         End If
     End Sub
     Private Sub readExcelFile()
+        Dim nO1Array, nT5Array, nC3Array, nF7Array, nFp1Array, nCzArray, nO2array, nT6Array, nC4Array, nF8Array, nFp2Array As New List(Of Double)
+        Dim nO1Array1, nT5Array1, nC3Array1, nF7Array1, nFp1Array1, nCzArray1, nO2array1, nT6Array1, nC4Array1, nF8Array1, nFp2Array1 As New List(Of Double)
+        Dim nO1Array2, nT5Array2, nC3Array2, nF7Array2, nFp1Array2, nCzArray2, nO2array2, nT6Array2, nC4Array2, nF8Array2, nFp2Array2 As New List(Of Double)
+        Dim nO1Array3, nT5Array3, nC3Array3, nF7Array3, nFp1Array3, nCzArray3, nO2array3, nT6Array3, nC4Array3, nF8Array3, nFp2Array3 As New List(Of Double)
+        Dim nO1Array4, nT5Array4, nC3Array4, nF7Array4, nFp1Array4, nCzArray4, nO2array4, nT6Array4, nC4Array4, nF8Array4, nFp2Array4 As New List(Of Double)
+        Dim arrayList, arrayList1, arraylist2, arraylist3, arraylist4 As New List(Of List(Of Double))
         Dim Loca As Integer
         Dim nApp As Excel.Application
         Dim nWorkbook As Excel.Workbook
@@ -116,10 +51,11 @@ Class MainWindow
         nApp = New Excel.Application
         Loca = 1
         nWorkbook = nApp.Workbooks.Open(textBox1.Text)
-        nWorksheet = nWorkbook.Worksheets("P D (2)")
+        nWorksheet = nWorkbook.Worksheets("P D")
         Dim nRange As Excel.Range = nWorksheet.UsedRange
         Dim nArray(,) As Object = nRange.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize As Integer = nArray.GetUpperBound(0)
+        MsgBox(nSize)
         For i As Integer = 2 To nSize
             nO1Array.Add(nArray(i, Loca + 1))
             nT5Array.Add(nArray(i, Loca + 2))
@@ -145,7 +81,7 @@ Class MainWindow
         arrayList.Add(nT5Array)
         arrayList.Add(nO1Array)
 
-        nWorksheet = nWorkbook.Worksheets("P T (2)")
+        nWorksheet = nWorkbook.Worksheets("P T")
         Dim nRange1 As Excel.Range = nWorksheet.UsedRange
         Dim nArray1(,) As Object = nRange1.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize1 As Integer = nArray.GetUpperBound(0)
@@ -174,7 +110,7 @@ Class MainWindow
         arrayList1.Add(nT5Array1)
         arrayList1.Add(nO1Array1)
 
-        nWorksheet = nWorkbook.Worksheets("P A (2)")
+        nWorksheet = nWorkbook.Worksheets("P A")
         Dim nRange2 As Excel.Range = nWorksheet.UsedRange
         Dim nArray2(,) As Object = nRange2.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize2 As Integer = nArray.GetUpperBound(0)
@@ -203,7 +139,7 @@ Class MainWindow
         arraylist2.Add(nT5Array2)
         arraylist2.Add(nO1Array2)
 
-        nWorksheet = nWorkbook.Worksheets("P B (2)")
+        nWorksheet = nWorkbook.Worksheets("P B")
         Dim nRange3 As Excel.Range = nWorksheet.UsedRange
         Dim nArray3(,) As Object = nRange3.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize3 As Integer = nArray.GetUpperBound(0)
@@ -232,7 +168,7 @@ Class MainWindow
         arraylist3.Add(nT5Array3)
         arraylist3.Add(nO1Array3)
 
-        nWorksheet = nWorkbook.Worksheets("P G (2)")
+        nWorksheet = nWorkbook.Worksheets("P G")
         Dim nRange4 As Excel.Range = nWorksheet.UsedRange
         Dim narray4(,) As Object = nRange4.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize4 As Integer = nArray.GetUpperBound(0)
@@ -272,13 +208,18 @@ Class MainWindow
         chrono()
     End Sub
     Private Sub chrono()
+        Dim temps As String()
         Dim Somme As Double
         Dim Maxi As Integer
         Dim tinterval As Integer
         Dim Itembande As Integer
         Dim ISeuil As Integer
         Dim Coef As Double
-        temps = {0 & "s", Floor(nC3Array.Count / 15) & "s", Floor((2 * nC3Array.Count) / 15) & "s", Floor((3 * nC3Array.Count) / 15) & "s", Floor((4 * nC3Array.Count) / 15) & "s", Floor((5 * nC3Array.Count) / 15) & "s", Floor((6 * nC3Array.Count) / 15) & "s", Floor((7 * nC3Array.Count) / 15) & "s", Floor((8 * nC3Array.Count) / 15) & "s", Floor((9 * nC3Array.Count) / 15) & "s", Floor((10 * nC3Array.Count) / 15) & "s", Floor((11 * nC3Array.Count) / 15) & "s", Floor((12 * nC3Array.Count) / 15) & "s", Floor((13 * nC3Array.Count) / 15) & "s", Floor((14 * nC3Array.Count) / 15) & "s"}
+        temps = {0 & "s", Floor(ListofArray(Itembande)(1).Count / 15) & "s", Floor((2 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((3 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((4 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((5 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((6 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((7 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((8 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((9 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((10 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((11 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((12 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((13 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((14 * ListofArray(Itembande)(1).Count) / 15) & "s"}
         For itime As Integer = 1 To 15
             listtemp(itime - 1).Content = temps(itime - 1)
         Next
@@ -319,6 +260,7 @@ Class MainWindow
             Seuil2.Clear()
             graph.Clear()
         End If
+
         For iVoie = 1 To 11
             Dim Serie As New ObservableCollection(Of GraphPoint)
             graph.Add(Serie)
@@ -352,6 +294,8 @@ Class MainWindow
             Next
         Next
         Dim Deb As Int32
+        MsgBox(graph(0).Count)
+        MsgBox(tinterval)
         Deb = Convert.ToInt32(textBoxSeuil.Text)
         Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
         Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = Deb}))
@@ -362,6 +306,7 @@ Class MainWindow
     Private Sub Tracer()
         Seuil1.DataContext = graph(11)
         Seuil1.Background = Brushes.Black
+        Seuil1.Opacity = 100
         Fp2line.DataContext = graph(0)
         Fp2line.Background = liste_voie(0).Color
         C4line.DataContext = graph(1)
@@ -384,22 +329,91 @@ Class MainWindow
         T5line.Background = liste_voie(9).Color
         O1line.DataContext = graph(10)
         O1line.Background = liste_voie(10).Color
+        Fp2line.Opacity = 100
+        C4line.Opacity = 100
+        F8line.Opacity = 100
+        T6line.Opacity = 100
+        O2line.Opacity = 100
+        Czline.Opacity = 100
+        Fp1line.Opacity = 100
+        C3line.Opacity = 100
+        F7line.Opacity = 100
+        T5line.Opacity = 100
+        O1line.Opacity = 100
+    End Sub
+    Private Sub Initialiser()
 
+        B = windows1.ActualWidth
+        Hauteurfen = windows1.ActualHeight
+        marge = 450
+        ' Initialisation des voie
+        Dim Fp2 As New VoieEEG(1, Hauteurfen, marge)
+        Dim C4 As New VoieEEG(2, Hauteurfen, marge)
+        Dim f8 As New VoieEEG(3, Hauteurfen, marge)
+        Dim T6 As New VoieEEG(4, Hauteurfen, marge)
+        Dim O2 As New VoieEEG(5, Hauteurfen, marge)
+        Dim cz As New VoieEEG(6, Hauteurfen, marge)
+        Dim fp1 As New VoieEEG(7, Hauteurfen, marge)
+        Dim c3 As New VoieEEG(8, Hauteurfen, marge)
+        Dim f7 As New VoieEEG(9, Hauteurfen, marge)
+        Dim t5 As New VoieEEG(10, Hauteurfen, marge)
+        Dim o1 As New VoieEEG(11, Hauteurfen, marge)
+        liste_voie.Add(Fp2)
+        liste_voie.Add(C4)
+        liste_voie.Add(f8)
+        liste_voie.Add(T6)
+        liste_voie.Add(O2)
+        liste_voie.Add(cz)
+        liste_voie.Add(fp1)
+        liste_voie.Add(c3)
+        liste_voie.Add(f7)
+        liste_voie.Add(t5)
+        liste_voie.Add(o1)
+
+        For i As Integer = 1 To 11
+            Canvas1.Children.Add(liste_voie(i - 1).Label1)
+            Canvas.SetTop(liste_voie(i - 1).Label1, liste_voie(i - 1).Vert_pos)
+            Canvas.SetLeft(liste_voie(i - 1).Label1, liste_voie(i - 1).Hor_pos)
+        Next
+        ' lignes représentant le temps /100s
+        For iline As Integer = 1 To 15
+            Dim ligne As New Line
+            Dim label1 As New Label
+            listtemp.Add(label1)
+            Canvas1.Children.Add(listtemp(iline - 1))
+            Canvas.SetTop(label1, 0)
+            'B taille de la fenêtre
+            Lfenetre = (B - 70 - liste_voie(2 - 1).Label1.ActualWidth) / 15
+            Canvas.SetLeft(label1, 65 + (Lfenetre * (iline - 1)))
+            Timeline.Add(ligne)
+            Timeline(iline - 1).Stroke = Brushes.LightSteelBlue
+            Timeline(iline - 1).X1 = 70 + (Lfenetre * (iline - 1))
+            Timeline(iline - 1).X2 = 70 + (Lfenetre * (iline - 1))
+            Timeline(iline - 1).Y1 = 40
+            Timeline(iline - 1).Y2 = (Hauteurfen - marge) + 25
+            Timeline(iline - 1).StrokeThickness = 0.5
+            Canvas1.Children.Add(Timeline(iline - 1))
+        Next
+        Panneau_Commande()
     End Sub
     Private Sub Panneau_Commande()
         Boutonchoix.Content = "Choisir un fichier excel"
         Boutonchoix.Height = 30
         Boutonchoix.Width = 150
+        buttonimp.Height = 30
+        buttonimp.Width = 150
+        buttonchange.Height = 30
+        buttonchange.Width = 150
         Canvas.SetTop(Boutonchoix, (((Hauteurfen - marge) / 11) * 11 + 25 + 30))
         Canvas.SetLeft(Boutonchoix, 20)
         Canvas.SetTop(Boutonchrono, (((Hauteurfen - marge) / 11) * 11 + 25 + 30))
         Canvas.SetLeft(Boutonchrono, Boutonchoix.ActualWidth + comboBox1.ActualWidth + 60)
+        Canvas.SetTop(buttonimp, (((Hauteurfen - marge) / 11) * 11 + 25 + 30))
+        Canvas.SetLeft(buttonimp, Boutonchoix.ActualWidth + comboBox1.ActualWidth + Boutonchrono.ActualWidth + 90)
+        Canvas.SetTop(buttonchange, (((Hauteurfen - marge) / 11) * 11 + 25 + 30))
+        Canvas.SetLeft(buttonchange, Boutonchoix.ActualWidth + comboBox1.ActualWidth + Boutonchrono.ActualWidth + buttonimp.ActualWidth + 120)
         Canvas.SetTop(textBox1, (((Hauteurfen - marge) / 11) * 11 + 25 + 75))
         Canvas.SetLeft(textBox1, 20)
-        comboBox1.Items.Add("Bande Delta")
-        comboBox1.Items.Add("Bande Theta")
-        comboBox1.Items.Add("Bande Alpha")
-        comboBox1.Items.Add("Bande Beta")
         comboBox1.Text = "Bande Delta"
         Canvas.SetLeft(comboBox1, 20 + Boutonchoix.ActualWidth + 20)
         Canvas.SetTop(comboBox1, (((Hauteurfen - marge) / 11) * 11 + 25 + 30))
@@ -408,6 +422,7 @@ Class MainWindow
         Canvas.SetTop(Seuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 85)
         Canvas.SetTop(textBoxSeuil, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 85)
         Canvas.SetLeft(textBoxSeuil, 20 + 140 + 20)
+        textBoxSeuil.Width = 90
         MyChart.Width = B / 2 - 40
         MyChart.Height = marge - 55
         Canvas.SetTop(MyChart, (((Hauteurfen - marge) / 11) * 11 + 25))
@@ -419,7 +434,55 @@ Class MainWindow
     End Sub
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
-
+    End Sub
+    Private Sub buttonimp_Click(sender As Object, e As RoutedEventArgs) Handles buttonimp.Click
+        Dim Rapport As Integer
+        Dim Dialog As New PrintDialog()
+        Dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue()
+        Dialog.PrintTicket = Dialog.PrintQueue.DefaultPrintTicket
+        Dialog.PrintTicket.PageOrientation = PageOrientation.Landscape
+        Rapport = Math.Ceiling(100 - (((Pow(21, 2) + Pow(29.7, 2)) / (Pow(Canvas1.ActualHeight * (2.54 / 96), 2) + Pow(Canvas1.ActualWidth * (2.54 / 96), 2))) * 100))
+        Dialog.PrintTicket.PageScalingFactor = Rapport - 5
+        If Dialog.ShowDialog = True Then
+            Dialog.PrintVisual(Canvas1, "My Canvas")
+        End If
+    End Sub
+    Private Sub buttonchange_Click(sender As Object, e As RoutedEventArgs) Handles buttonchange.Click
+        MsgBox(Nbinterval)
+        If Nbinterval <> 0 Then
+            For iVoie = 1 To 11
+                Canvas1.Children.Remove(liste_voie(iVoie - 1).Label1)
+                For itemps As Integer = 1 To Nbinterval
+                    Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
+                Next
+            Next
+            For itemps = 1 To 15
+                Canvas1.Children.Remove(listtemp(itemps - 1))
+                Canvas1.Children.Remove(Timeline(itemps - 1))
+            Next
+        End If
+        graph.Clear()
+        Nbinterval = 0
+        MsgBox(Nbinterval)
+        liste_voie.Clear()
+        listtemp.Clear()
+        Timeline.Clear()
+        ListofArray.Clear()
+        Seuil2.Clear()
+        Seuil1.Opacity = 0
+        Fp2line.Opacity = 0
+        C4line.Opacity = 0
+        F8line.Opacity = 0
+        T6line.Opacity = 0
+        O2line.Opacity = 0
+        Czline.Opacity = 0
+        Fp1line.Opacity = 0
+        C3line.Opacity = 0
+        F7line.Opacity = 0
+        T5line.Opacity = 0
+        O1line.Opacity = 0
+        Initialiser()
+        Choice()
     End Sub
 
 End Class

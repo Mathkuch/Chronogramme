@@ -7,7 +7,7 @@
     Public Hor_pos As Integer
     Public Hor_int_pos As Integer
     Public Label1 As Label
-    Dim nomVoie = {"Fp2", "C4", "F8", "T6", "O2", "Cz", "Fp1", "C3", "F7", "T5", "O1"}
+    Dim nomVoie = {"Fp2", "F8", "C4", "T6", "O2", "Cz", "Fp1", "F7", "C3", "T5", "O1"}
     Dim br As New List(Of Brush)
     Public Sub New(ByVal i As Integer, ByVal Hauteurfen As Integer, ByVal margebasse As Integer)
         Dim label As New Label
