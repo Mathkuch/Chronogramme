@@ -4,20 +4,16 @@ Imports System.Collections.ObjectModel
 Imports System.Math
 Imports System.Drawing.Printing
 Imports System.Printing
-
 Class MainWindow
     Dim Nbinterval, Hauteurfen, B, marge, Lfenetre, Vert(11) As Integer
     Dim Seuil2 As New ObservableCollection(Of GraphPoint)
     Dim Timeline As New List(Of Line)
     Dim listtemp As New List(Of Label)
-    Dim Br As New List(Of Brush)
-    'Puissance
-    '''données Excel
+    Dim Br As New List(Of Brush) 'couleur des voies EEG
     Dim ListofArray As New List(Of List(Of List(Of Double)))
     Dim liste_voie As New List(Of VoieEEG)
     Dim graph As New List(Of ObservableCollection(Of GraphPoint))
     Dim prd As New PrintDocument()
-
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
         comboBox1.Items.Add("Bande Delta")
         comboBox1.Items.Add("Bande Theta")
@@ -26,323 +22,7 @@ Class MainWindow
         Initialiser()
         '''''Bouton pour injecter le fichier Excel
     End Sub
-    Private Sub Boutonchoix_Click(sender As Object, e As RoutedEventArgs) Handles Boutonchoix.Click
-        Choice()
-    End Sub
-    Private Sub Choice()
-        Dim nOFD As New Microsoft.Win32.OpenFileDialog()
-        Dim nResultOFD As Nullable(Of Boolean) = nOFD.ShowDialog()
-        If nResultOFD = True Then
-            textBox1.Text = nOFD.FileName
-            readExcelFile()
-        End If
-    End Sub
-    Private Sub readExcelFile()
-        Dim nO1Array, nT5Array, nC3Array, nF7Array, nFp1Array, nCzArray, nO2array, nT6Array, nC4Array, nF8Array, nFp2Array As New List(Of Double)
-        Dim nO1Array1, nT5Array1, nC3Array1, nF7Array1, nFp1Array1, nCzArray1, nO2array1, nT6Array1, nC4Array1, nF8Array1, nFp2Array1 As New List(Of Double)
-        Dim nO1Array2, nT5Array2, nC3Array2, nF7Array2, nFp1Array2, nCzArray2, nO2array2, nT6Array2, nC4Array2, nF8Array2, nFp2Array2 As New List(Of Double)
-        Dim nO1Array3, nT5Array3, nC3Array3, nF7Array3, nFp1Array3, nCzArray3, nO2array3, nT6Array3, nC4Array3, nF8Array3, nFp2Array3 As New List(Of Double)
-        Dim nO1Array4, nT5Array4, nC3Array4, nF7Array4, nFp1Array4, nCzArray4, nO2array4, nT6Array4, nC4Array4, nF8Array4, nFp2Array4 As New List(Of Double)
-        Dim arrayList, arrayList1, arraylist2, arraylist3, arraylist4 As New List(Of List(Of Double))
-        Dim Loca As Integer
-        Dim nApp As Excel.Application
-        Dim nWorkbook As Excel.Workbook
-        Dim nWorksheet As Excel.Worksheet
-        nApp = New Excel.Application
-        Loca = 1
-        nWorkbook = nApp.Workbooks.Open(textBox1.Text)
-        nWorksheet = nWorkbook.Worksheets("P D")
-        Dim nRange As Excel.Range = nWorksheet.UsedRange
-        Dim nArray(,) As Object = nRange.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
-        Dim nSize As Integer = nArray.GetUpperBound(0)
-        MsgBox(nSize)
-        For i As Integer = 2 To nSize
-            nO1Array.Add(nArray(i, Loca + 1))
-            nT5Array.Add(nArray(i, Loca + 2))
-            nC3Array.Add(nArray(i, Loca + 3))
-            nF7Array.Add(nArray(i, Loca + 4))
-            nFp1Array.Add(nArray(i, Loca + 5))
-            nCzArray.Add(nArray(i, Loca + 6))
-            nO2array.Add(nArray(i, Loca + 7))
-            nT6Array.Add(nArray(i, Loca + 8))
-            nC4Array.Add(nArray(i, Loca + 9))
-            nF8Array.Add(nArray(i, Loca + 10))
-            nFp2Array.Add(nArray(i, Loca + 11))
-        Next
-        arrayList.Add(nFp2Array)
-        arrayList.Add(nF8Array)
-        arrayList.Add(nC4Array)
-        arrayList.Add(nT6Array)
-        arrayList.Add(nO2array)
-        arrayList.Add(nCzArray)
-        arrayList.Add(nFp1Array)
-        arrayList.Add(nC3Array)
-        arrayList.Add(nF7Array)
-        arrayList.Add(nT5Array)
-        arrayList.Add(nO1Array)
-
-        nWorksheet = nWorkbook.Worksheets("P T")
-        Dim nRange1 As Excel.Range = nWorksheet.UsedRange
-        Dim nArray1(,) As Object = nRange1.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
-        Dim nSize1 As Integer = nArray.GetUpperBound(0)
-        For i As Integer = 2 To nSize1
-            nO1Array1.Add(nArray1(i, Loca + 1))
-            nT5Array1.Add(nArray1(i, Loca + 2))
-            nC3Array1.Add(nArray1(i, Loca + 3))
-            nF7Array1.Add(nArray1(i, Loca + 4))
-            nFp1Array1.Add(nArray1(i, Loca + 5))
-            nCzArray1.Add(nArray1(i, Loca + 6))
-            nO2array1.Add(nArray1(i, Loca + 7))
-            nT6Array1.Add(nArray1(i, Loca + 8))
-            nC4Array1.Add(nArray1(i, Loca + 9))
-            nF8Array1.Add(nArray1(i, Loca + 10))
-            nFp2Array1.Add(nArray1(i, Loca + 11))
-        Next
-        arrayList1.Add(nFp2Array1)
-        arrayList1.Add(nF8Array1)
-        arrayList1.Add(nC4Array1)
-        arrayList1.Add(nT6Array1)
-        arrayList1.Add(nO2array1)
-        arrayList1.Add(nCzArray1)
-        arrayList1.Add(nFp1Array1)
-        arrayList1.Add(nC3Array1)
-        arrayList1.Add(nF7Array1)
-        arrayList1.Add(nT5Array1)
-        arrayList1.Add(nO1Array1)
-
-        nWorksheet = nWorkbook.Worksheets("P A")
-        Dim nRange2 As Excel.Range = nWorksheet.UsedRange
-        Dim nArray2(,) As Object = nRange2.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
-        Dim nSize2 As Integer = nArray.GetUpperBound(0)
-        For i As Integer = 2 To nSize2
-            nO1Array2.Add(nArray2(i, Loca + 1))
-            nT5Array2.Add(nArray2(i, Loca + 2))
-            nC3Array2.Add(nArray2(i, Loca + 3))
-            nF7Array2.Add(nArray2(i, Loca + 4))
-            nFp1Array2.Add(nArray2(i, Loca + 5))
-            nCzArray2.Add(nArray2(i, Loca + 6))
-            nO2array2.Add(nArray2(i, Loca + 7))
-            nT6Array2.Add(nArray2(i, Loca + 8))
-            nC4Array2.Add(nArray2(i, Loca + 9))
-            nF8Array2.Add(nArray2(i, Loca + 10))
-            nFp2Array2.Add(nArray2(i, Loca + 11))
-        Next
-        arraylist2.Add(nFp2Array2)
-        arraylist2.Add(nF8Array2)
-        arraylist2.Add(nC4Array2)
-        arraylist2.Add(nT6Array2)
-        arraylist2.Add(nO2array2)
-        arraylist2.Add(nCzArray2)
-        arraylist2.Add(nFp1Array2)
-        arraylist2.Add(nC3Array2)
-        arraylist2.Add(nF7Array2)
-        arraylist2.Add(nT5Array2)
-        arraylist2.Add(nO1Array2)
-
-        nWorksheet = nWorkbook.Worksheets("P B")
-        Dim nRange3 As Excel.Range = nWorksheet.UsedRange
-        Dim nArray3(,) As Object = nRange3.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
-        Dim nSize3 As Integer = nArray.GetUpperBound(0)
-        For i As Integer = 2 To nSize3
-            nO1Array3.Add(nArray3(i, Loca + 1))
-            nT5Array3.Add(nArray3(i, Loca + 2))
-            nC3Array3.Add(nArray3(i, Loca + 3))
-            nF7Array3.Add(nArray3(i, Loca + 4))
-            nFp1Array3.Add(nArray3(i, Loca + 5))
-            nCzArray3.Add(nArray3(i, Loca + 6))
-            nO2array3.Add(nArray3(i, Loca + 7))
-            nT6Array3.Add(nArray3(i, Loca + 8))
-            nC4Array3.Add(nArray3(i, Loca + 9))
-            nF8Array3.Add(nArray3(i, Loca + 10))
-            nFp2Array3.Add(nArray3(i, Loca + 11))
-        Next
-        arraylist3.Add(nFp2Array3)
-        arraylist3.Add(nF8Array3)
-        arraylist3.Add(nC4Array3)
-        arraylist3.Add(nT6Array3)
-        arraylist3.Add(nO2array3)
-        arraylist3.Add(nCzArray3)
-        arraylist3.Add(nFp1Array3)
-        arraylist3.Add(nC3Array3)
-        arraylist3.Add(nF7Array3)
-        arraylist3.Add(nT5Array3)
-        arraylist3.Add(nO1Array3)
-
-        nWorksheet = nWorkbook.Worksheets("P G")
-        Dim nRange4 As Excel.Range = nWorksheet.UsedRange
-        Dim narray4(,) As Object = nRange4.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
-        Dim nSize4 As Integer = nArray.GetUpperBound(0)
-        For i As Integer = 2 To nSize4
-            nO1Array4.Add(narray4(i, Loca + 1))
-            nT5Array4.Add(narray4(i, Loca + 2))
-            nC3Array4.Add(narray4(i, Loca + 3))
-            nF7Array4.Add(narray4(i, Loca + 4))
-            nFp1Array4.Add(narray4(i, Loca + 5))
-            nCzArray4.Add(narray4(i, Loca + 6))
-            nO2array4.Add(narray4(i, Loca + 7))
-            nT6Array4.Add(narray4(i, Loca + 8))
-            nC4Array4.Add(narray4(i, Loca + 9))
-            nF8Array4.Add(narray4(i, Loca + 10))
-            nFp2Array4.Add(narray4(i, Loca + 11))
-        Next
-        arraylist4.Add(nFp2Array4)
-        arraylist4.Add(nF8Array4)
-        arraylist4.Add(nC4Array4)
-        arraylist4.Add(nT6Array4)
-        arraylist4.Add(nO2array4)
-        arraylist4.Add(nCzArray4)
-        arraylist4.Add(nFp1Array4)
-        arraylist4.Add(nC3Array4)
-        arraylist4.Add(nF7Array4)
-        arraylist4.Add(nT5Array4)
-        arraylist4.Add(nO1Array4)
-
-        ListofArray.Add(arrayList)
-        ListofArray.Add(arrayList1)
-        ListofArray.Add(arraylist2)
-        ListofArray.Add(arraylist3)
-        ListofArray.Add(arraylist4)
-    End Sub
-
-    Private Sub Boutonchrono_Click(sender As Object, e As RoutedEventArgs) Handles Boutonchrono.Click
-        chrono()
-    End Sub
-    Private Sub chrono()
-        Dim temps As String()
-        Dim Somme As Double
-        Dim Maxi As Integer
-        Dim tinterval As Integer
-        Dim Itembande As Integer
-        Dim ISeuil As Integer
-        Dim Coef As Double
-        temps = {0 & "s", Floor(ListofArray(Itembande)(1).Count / 15) & "s", Floor((2 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((3 * ListofArray(Itembande)(1).Count) / 15) &
-            "s", Floor((4 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((5 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((6 * ListofArray(Itembande)(1).Count) / 15) &
-            "s", Floor((7 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((8 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((9 * ListofArray(Itembande)(1).Count) / 15) &
-            "s", Floor((10 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((11 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((12 * ListofArray(Itembande)(1).Count) / 15) &
-            "s", Floor((13 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((14 * ListofArray(Itembande)(1).Count) / 15) & "s"}
-        For itime As Integer = 1 To 15
-            listtemp(itime - 1).Content = temps(itime - 1)
-        Next
-        ISeuil = Convert.ToInt32(textBoxSeuil.Text)
-        Maxi = 0
-        tinterval = Convert.ToInt32(nbint.Text)
-        Itembande = comboBox1.SelectedIndex
-        If Nbinterval <> 0 Then
-            For iVoie = 1 To 11
-                For itemps As Integer = 1 To Nbinterval
-                    Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
-                Next
-                liste_voie(iVoie - 1).Interval.Clear()
-
-            Next
-            Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
-        Else
-            Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
-        End If
-        Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, 10)
-        For xtab As Integer = 0 To 10
-            For imoy As Integer = 1 To Nbinterval
-                Somme = 0
-                For itot = 0 To (tinterval - 1)
-                    Somme = Somme + ListofArray(Itembande)(xtab)((imoy * tinterval) + itot)
-                Next
-                tableau(imoy, xtab) = Int(Somme / tinterval)
-                If Maxi < Int(Somme / tinterval) Then
-                    Maxi = Int(Somme / tinterval)
-                End If
-            Next
-        Next
-        If textBox1.Text = "Fichier Excel de travail" Then
-            MsgBox("Merci de choisir un fichier Excel avant de demander le chronogramme")
-            Exit Sub
-        End If
-        If Seuil2.Count > 0 Then
-            Seuil2.Clear()
-            graph.Clear()
-        End If
-
-        For iVoie = 1 To 11
-            Dim Serie As New ObservableCollection(Of GraphPoint)
-            graph.Add(Serie)
-            Select Case tinterval
-                Case 1
-                    Coef = 0.5
-                Case 2 To 4
-                    Coef = 0.3
-                Case 5 To 9
-                    Coef = 0.15
-                Case Else
-                    Coef = 0.05
-            End Select
-            For itemps As Integer = 1 To Nbinterval
-                Serie.Add((New GraphPoint() With {.PxNum = itemps * tinterval, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
-                Dim Intervall = New Rectangle()
-                liste_voie(iVoie - 1).Interval.Add(Intervall)
-                If tableau(itemps, iVoie - 1) > ISeuil Then
-                    liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 100) / Maxi
-                Else
-                    liste_voie(iVoie - 1).Interval(itemps - 1).Height = 0
-                End If
-                'liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt((Lfenetre * 15 / Nbinterval)) - 1.5
-                liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt(((Lfenetre * 15) / Nbinterval) - Coef * CInt((Lfenetre * 15 / Nbinterval)))
-                liste_voie(iVoie - 1).Interval(itemps - 1).Stroke = liste_voie(iVoie - 1).Color
-                liste_voie(iVoie - 1).Interval(itemps - 1).StrokeThickness = 2
-                liste_voie(iVoie - 1).Interval(itemps - 1).Fill = liste_voie(iVoie - 1).Color
-                Canvas1.Children.Add(liste_voie(iVoie - 1).Interval(itemps - 1))
-                Canvas.SetLeft(Intervall, 70 + CInt((Lfenetre * 15 / Nbinterval) * (itemps - 1) + Coef * CInt((Lfenetre * 15 / Nbinterval))))
-                Canvas.SetTop(Intervall, liste_voie(iVoie - 1).Vert_pos + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
-            Next
-        Next
-        Dim Deb As Int32
-        MsgBox(graph(0).Count)
-        MsgBox(tinterval)
-        Deb = Convert.ToInt32(textBoxSeuil.Text)
-        Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
-        Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = Deb}))
-        graph.Add(Seuil2)
-        Tracer()
-    End Sub
-
-    Private Sub Tracer()
-        Seuil1.DataContext = graph(11)
-        Seuil1.Background = Brushes.Black
-        Seuil1.Opacity = 100
-        Fp2line.DataContext = graph(0)
-        Fp2line.Background = liste_voie(0).Color
-        C4line.DataContext = graph(1)
-        C4line.Background = liste_voie(1).Color
-        F8line.DataContext = graph(2)
-        F8line.Background = liste_voie(2).Color
-        T6line.DataContext = graph(3)
-        T6line.Background = liste_voie(3).Color
-        O2line.DataContext = graph(4)
-        O2line.Background = liste_voie(4).Color
-        Czline.DataContext = graph(5)
-        Czline.Background = liste_voie(5).Color
-        Fp1line.DataContext = graph(6)
-        Fp1line.Background = liste_voie(6).Color
-        C3line.DataContext = graph(7)
-        C3line.Background = liste_voie(7).Color
-        F7line.DataContext = graph(8)
-        F7line.Background = liste_voie(8).Color
-        T5line.DataContext = graph(9)
-        T5line.Background = liste_voie(9).Color
-        O1line.DataContext = graph(10)
-        O1line.Background = liste_voie(10).Color
-        Fp2line.Opacity = 100
-        C4line.Opacity = 100
-        F8line.Opacity = 100
-        T6line.Opacity = 100
-        O2line.Opacity = 100
-        Czline.Opacity = 100
-        Fp1line.Opacity = 100
-        C3line.Opacity = 100
-        F7line.Opacity = 100
-        T5line.Opacity = 100
-        O1line.Opacity = 100
-    End Sub
     Private Sub Initialiser()
-
         B = windows1.ActualWidth
         Hauteurfen = windows1.ActualHeight
         marge = 450
@@ -432,6 +112,320 @@ Class MainWindow
         Canvas.SetLeft(nbint, 20 + labelduree.ActualWidth)
         Canvas.SetTop(nbint, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55)
     End Sub
+    Private Sub Boutonchoix_Click(sender As Object, e As RoutedEventArgs) Handles Boutonchoix.Click
+        Choice()
+    End Sub
+    Private Sub Choice()
+        Dim nOFD As New Microsoft.Win32.OpenFileDialog()
+        Dim nResultOFD As Nullable(Of Boolean) = nOFD.ShowDialog()
+        If nResultOFD = True Then
+            textBox1.Text = nOFD.FileName
+            readExcelFile()
+            MsgBox(ListofArray(2)(2)(0))
+        End If
+    End Sub
+    Private Sub readExcelFile()
+        Dim nO1Array, nT5Array, nC3Array, nF7Array, nFp1Array, nCzArray, nO2array, nT6Array, nC4Array, nF8Array, nFp2Array As New List(Of Double)
+        Dim nO1Array1, nT5Array1, nC3Array1, nF7Array1, nFp1Array1, nCzArray1, nO2array1, nT6Array1, nC4Array1, nF8Array1, nFp2Array1 As New List(Of Double)
+        Dim nO1Array2, nT5Array2, nC3Array2, nF7Array2, nFp1Array2, nCzArray2, nO2array2, nT6Array2, nC4Array2, nF8Array2, nFp2Array2 As New List(Of Double)
+        Dim nO1Array3, nT5Array3, nC3Array3, nF7Array3, nFp1Array3, nCzArray3, nO2array3, nT6Array3, nC4Array3, nF8Array3, nFp2Array3 As New List(Of Double)
+        Dim nO1Array4, nT5Array4, nC3Array4, nF7Array4, nFp1Array4, nCzArray4, nO2array4, nT6Array4, nC4Array4, nF8Array4, nFp2Array4 As New List(Of Double)
+        Dim arrayList, arrayList1, arraylist2, arraylist3, arraylist4 As New List(Of List(Of Double))
+        Dim Loca As Integer
+        Dim nApp As Excel.Application
+        Dim nWorkbook As Excel.Workbook
+        Dim nWorksheet As Excel.Worksheet
+        nApp = New Excel.Application
+        Loca = 1
+        nWorkbook = nApp.Workbooks.Open(textBox1.Text)
+        nWorksheet = nWorkbook.Worksheets("P D")
+        Dim nRange As Excel.Range = nWorksheet.UsedRange
+        Dim nArray(,) As Object = nRange.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
+        Dim nSize As Integer = nArray.GetUpperBound(0)
+        For i As Integer = 2 To nSize
+            nO1Array.Add(nArray(i, Loca + 1))
+            nT5Array.Add(nArray(i, Loca + 2))
+            nC3Array.Add(nArray(i, Loca + 3))
+            nF7Array.Add(nArray(i, Loca + 4))
+            nFp1Array.Add(nArray(i, Loca + 5))
+            nCzArray.Add(nArray(i, Loca + 6))
+            nO2array.Add(nArray(i, Loca + 7))
+            nT6Array.Add(nArray(i, Loca + 8))
+            nC4Array.Add(nArray(i, Loca + 9))
+            nF8Array.Add(nArray(i, Loca + 10))
+            nFp2Array.Add(nArray(i, Loca + 11))
+        Next
+        arrayList.Add(nFp2Array)
+        arrayList.Add(nF8Array)
+        arrayList.Add(nC4Array)
+        arrayList.Add(nT6Array)
+        arrayList.Add(nO2array)
+        arrayList.Add(nCzArray)
+        arrayList.Add(nFp1Array)
+        arrayList.Add(nF7Array)
+        arrayList.Add(nC3Array)
+        arrayList.Add(nT5Array)
+        arrayList.Add(nO1Array)
+
+        nWorksheet = nWorkbook.Worksheets("P T")
+        Dim nRange1 As Excel.Range = nWorksheet.UsedRange
+        Dim nArray1(,) As Object = nRange1.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
+        Dim nSize1 As Integer = nArray.GetUpperBound(0)
+        For i As Integer = 2 To nSize1
+            nO1Array1.Add(nArray1(i, Loca + 1))
+            nT5Array1.Add(nArray1(i, Loca + 2))
+            nC3Array1.Add(nArray1(i, Loca + 3))
+            nF7Array1.Add(nArray1(i, Loca + 4))
+            nFp1Array1.Add(nArray1(i, Loca + 5))
+            nCzArray1.Add(nArray1(i, Loca + 6))
+            nO2array1.Add(nArray1(i, Loca + 7))
+            nT6Array1.Add(nArray1(i, Loca + 8))
+            nC4Array1.Add(nArray1(i, Loca + 9))
+            nF8Array1.Add(nArray1(i, Loca + 10))
+            nFp2Array1.Add(nArray1(i, Loca + 11))
+        Next
+        arrayList1.Add(nFp2Array1)
+        arrayList1.Add(nF8Array1)
+        arrayList1.Add(nC4Array1)
+        arrayList1.Add(nT6Array1)
+        arrayList1.Add(nO2array1)
+        arrayList1.Add(nCzArray1)
+        arrayList1.Add(nFp1Array1)
+        arrayList1.Add(nF7Array1)
+        arrayList1.Add(nC3Array1)
+        arrayList1.Add(nT5Array1)
+        arrayList1.Add(nO1Array1)
+
+        nWorksheet = nWorkbook.Worksheets("P A")
+        Dim nRange2 As Excel.Range = nWorksheet.UsedRange
+        Dim nArray2(,) As Object = nRange2.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
+        Dim nSize2 As Integer = nArray.GetUpperBound(0)
+        For i As Integer = 2 To nSize2
+            nO1Array2.Add(nArray2(i, Loca + 1))
+            nT5Array2.Add(nArray2(i, Loca + 2))
+            nC3Array2.Add(nArray2(i, Loca + 3))
+            nF7Array2.Add(nArray2(i, Loca + 4))
+            nFp1Array2.Add(nArray2(i, Loca + 5))
+            nCzArray2.Add(nArray2(i, Loca + 6))
+            nO2array2.Add(nArray2(i, Loca + 7))
+            nT6Array2.Add(nArray2(i, Loca + 8))
+            nC4Array2.Add(nArray2(i, Loca + 9))
+            nF8Array2.Add(nArray2(i, Loca + 10))
+            nFp2Array2.Add(nArray2(i, Loca + 11))
+        Next
+        arraylist2.Add(nFp2Array2)
+        arraylist2.Add(nF8Array2)
+        arraylist2.Add(nC4Array2)
+        arraylist2.Add(nT6Array2)
+        arraylist2.Add(nO2array2)
+        arraylist2.Add(nCzArray2)
+        arraylist2.Add(nFp1Array2)
+        arraylist2.Add(nF7Array2)
+        arraylist2.Add(nC3Array2)
+        arraylist2.Add(nT5Array2)
+        arraylist2.Add(nO1Array2)
+
+        nWorksheet = nWorkbook.Worksheets("P B")
+        Dim nRange3 As Excel.Range = nWorksheet.UsedRange
+        Dim nArray3(,) As Object = nRange3.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
+        Dim nSize3 As Integer = nArray.GetUpperBound(0)
+        For i As Integer = 2 To nSize3
+            nO1Array3.Add(nArray3(i, Loca + 1))
+            nT5Array3.Add(nArray3(i, Loca + 2))
+            nC3Array3.Add(nArray3(i, Loca + 3))
+            nF7Array3.Add(nArray3(i, Loca + 4))
+            nFp1Array3.Add(nArray3(i, Loca + 5))
+            nCzArray3.Add(nArray3(i, Loca + 6))
+            nO2array3.Add(nArray3(i, Loca + 7))
+            nT6Array3.Add(nArray3(i, Loca + 8))
+            nC4Array3.Add(nArray3(i, Loca + 9))
+            nF8Array3.Add(nArray3(i, Loca + 10))
+            nFp2Array3.Add(nArray3(i, Loca + 11))
+        Next
+        arraylist3.Add(nFp2Array3)
+        arraylist3.Add(nF8Array3)
+        arraylist3.Add(nC4Array3)
+        arraylist3.Add(nT6Array3)
+        arraylist3.Add(nO2array3)
+        arraylist3.Add(nCzArray3)
+        arraylist3.Add(nFp1Array3)
+        arraylist3.Add(nF7Array3)
+        arraylist3.Add(nC3Array3)
+        arraylist3.Add(nT5Array3)
+        arraylist3.Add(nO1Array3)
+
+        nWorksheet = nWorkbook.Worksheets("P G")
+        Dim nRange4 As Excel.Range = nWorksheet.UsedRange
+        Dim narray4(,) As Object = nRange4.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
+        Dim nSize4 As Integer = nArray.GetUpperBound(0)
+        For i As Integer = 2 To nSize4
+            nO1Array4.Add(narray4(i, Loca + 1))
+            nT5Array4.Add(narray4(i, Loca + 2))
+            nC3Array4.Add(narray4(i, Loca + 3))
+            nF7Array4.Add(narray4(i, Loca + 4))
+            nFp1Array4.Add(narray4(i, Loca + 5))
+            nCzArray4.Add(narray4(i, Loca + 6))
+            nO2array4.Add(narray4(i, Loca + 7))
+            nT6Array4.Add(narray4(i, Loca + 8))
+            nC4Array4.Add(narray4(i, Loca + 9))
+            nF8Array4.Add(narray4(i, Loca + 10))
+            nFp2Array4.Add(narray4(i, Loca + 11))
+        Next
+        arraylist4.Add(nFp2Array4)
+        arraylist4.Add(nF8Array4)
+        arraylist4.Add(nC4Array4)
+        arraylist4.Add(nT6Array4)
+        arraylist4.Add(nO2array4)
+        arraylist4.Add(nCzArray4)
+        arraylist4.Add(nFp1Array4)
+        arraylist4.Add(nF7Array4)
+        arraylist4.Add(nC3Array4)
+        arraylist4.Add(nT5Array4)
+        arraylist4.Add(nO1Array4)
+
+        ListofArray.Add(arrayList)
+        ListofArray.Add(arrayList1)
+        ListofArray.Add(arraylist2)
+        ListofArray.Add(arraylist3)
+        ListofArray.Add(arraylist4)
+    End Sub
+    Private Sub Boutonchrono_Click(sender As Object, e As RoutedEventArgs) Handles Boutonchrono.Click
+        chrono()
+    End Sub
+    Private Sub chrono()
+        Dim temps As String()
+        Dim Somme As Double
+        Dim Maxi As Integer
+        Dim tinterval As Integer
+        Dim Itembande As Integer
+        Dim ISeuil As Integer
+        Dim Coef As Double
+        If textBox1.Text = "Fichier Excel de travail" Then
+            MsgBox("Choisir d'abord un fichier excel")
+        Else
+            temps = {0 & "s", Floor(ListofArray(Itembande)(1).Count / 15) & "s", Floor((2 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((3 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((4 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((5 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((6 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((7 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((8 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((9 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((10 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((11 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((12 * ListofArray(Itembande)(1).Count) / 15) &
+            "s", Floor((13 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((14 * ListofArray(Itembande)(1).Count) / 15) & "s"}
+            For itime As Integer = 1 To 15
+                listtemp(itime - 1).Content = temps(itime - 1)
+            Next
+            ISeuil = Convert.ToInt32(textBoxSeuil.Text)
+            Maxi = 0
+            tinterval = Convert.ToInt32(nbint.Text)
+            Itembande = comboBox1.SelectedIndex
+            If Nbinterval <> 0 Then
+                For iVoie = 1 To 11
+                    For itemps As Integer = 1 To Nbinterval
+                        Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
+                    Next
+                    liste_voie(iVoie - 1).Interval.Clear()
+
+                Next
+                Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
+            Else
+                Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
+            End If
+            Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, 11)
+            For xtab As Integer = 0 To 10
+                For imoy As Integer = 1 To Nbinterval
+                    Somme = 0
+                    For itot = 0 To (tinterval - 1)
+                        Somme = Somme + ListofArray(Itembande)(xtab)((imoy * tinterval) + itot)
+                    Next
+                    tableau(imoy, xtab) = Int(Somme / tinterval)
+                    If Maxi < Int(Somme / tinterval) Then
+                        Maxi = Int(Somme / tinterval)
+                    End If
+                Next
+            Next
+            If textBox1.Text = "Fichier Excel de travail" Then
+                MsgBox("Merci de choisir un fichier Excel avant de demander le chronogramme")
+                Exit Sub
+            End If
+            If Seuil2.Count > 0 Then
+                Seuil2.Clear()
+                graph.Clear()
+            End If
+            For iVoie = 1 To 11
+                Dim Serie As New ObservableCollection(Of GraphPoint)
+                Select Case tinterval
+                    Case 1
+                        Coef = 0.5
+                    Case 2 To 4
+                        Coef = 0.3
+                    Case 5 To 9
+                        Coef = 0.15
+                    Case Else
+                        Coef = 0.05
+                End Select
+                For itemps As Integer = 1 To Nbinterval
+                    Serie.Add((New GraphPoint() With {.PxNum = itemps * tinterval, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
+                    Dim Intervall = New Rectangle()
+                    liste_voie(iVoie - 1).Interval.Add(Intervall)
+                    If tableau(itemps, iVoie - 1) > ISeuil Then
+                        liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 100) / Maxi
+                    Else
+                        liste_voie(iVoie - 1).Interval(itemps - 1).Height = 0
+                    End If
+                    'liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt((Lfenetre * 15 / Nbinterval)) - 1.5
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt(((Lfenetre * 15) / Nbinterval) - Coef * CInt((Lfenetre * 15 / Nbinterval)))
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Stroke = liste_voie(iVoie - 1).Color
+                    liste_voie(iVoie - 1).Interval(itemps - 1).StrokeThickness = 2
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Fill = liste_voie(iVoie - 1).Color
+                    Canvas1.Children.Add(liste_voie(iVoie - 1).Interval(itemps - 1))
+                    Canvas.SetLeft(Intervall, 70 + CInt((Lfenetre * 15 / Nbinterval) * (itemps - 1) + Coef * CInt((Lfenetre * 15 / Nbinterval))))
+                    Canvas.SetTop(Intervall, liste_voie(iVoie - 1).Vert_pos + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
+                Next
+                graph.Add(Serie)
+            Next
+            Dim Deb As Int32
+            Deb = Convert.ToInt32(textBoxSeuil.Text)
+            Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
+            Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = Deb}))
+            graph.Add(Seuil2)
+            Tracer()
+        End If
+    End Sub
+    Private Sub Tracer()
+        Seuil1.DataContext = graph(11)
+        Seuil1.Background = Brushes.Black
+        Seuil1.Opacity = 100
+        Fp2line.DataContext = graph(0)
+        Fp2line.Background = liste_voie(0).Color
+        F8line.DataContext = graph(1)
+        F8line.Background = liste_voie(1).Color
+        C4line.DataContext = graph(2)
+        C4line.Background = liste_voie(2).Color
+        T6line.DataContext = graph(3)
+        T6line.Background = liste_voie(3).Color
+        O2line.DataContext = graph(4)
+        O2line.Background = liste_voie(4).Color
+        Czline.DataContext = graph(5)
+        Czline.Background = liste_voie(5).Color
+        Fp1line.DataContext = graph(6)
+        Fp1line.Background = liste_voie(6).Color
+        F7line.DataContext = graph(7)
+        F7line.Background = liste_voie(7).Color
+        C3line.DataContext = graph(8)
+        C3line.Background = liste_voie(8).Color
+        T5line.DataContext = graph(9)
+        T5line.Background = liste_voie(9).Color
+        O1line.DataContext = graph(10)
+        O1line.Background = liste_voie(10).Color
+        Fp2line.Opacity = 100
+        C4line.Opacity = 100
+        F8line.Opacity = 100
+        T6line.Opacity = 100
+        O2line.Opacity = 100
+        Czline.Opacity = 100
+        Fp1line.Opacity = 100
+        C3line.Opacity = 100
+        F7line.Opacity = 100
+        T5line.Opacity = 100
+        O1line.Opacity = 100
+    End Sub
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
     End Sub
@@ -448,7 +442,6 @@ Class MainWindow
         End If
     End Sub
     Private Sub buttonchange_Click(sender As Object, e As RoutedEventArgs) Handles buttonchange.Click
-        MsgBox(Nbinterval)
         If Nbinterval <> 0 Then
             For iVoie = 1 To 11
                 Canvas1.Children.Remove(liste_voie(iVoie - 1).Label1)
@@ -463,7 +456,6 @@ Class MainWindow
         End If
         graph.Clear()
         Nbinterval = 0
-        MsgBox(Nbinterval)
         liste_voie.Clear()
         listtemp.Clear()
         Timeline.Clear()
@@ -484,6 +476,5 @@ Class MainWindow
         Initialiser()
         Choice()
     End Sub
-
 End Class
 
