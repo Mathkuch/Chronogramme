@@ -4,9 +4,13 @@ Imports System.Collections.ObjectModel
 Imports System.Math
 Imports System.Drawing.Printing
 Imports System.Printing
+
+
 Class MainWindow
     Dim Nbinterval, Hauteurfen, B, marge, Lfenetre, Vert(11) As Integer
     Dim Seuil2 As New ObservableCollection(Of GraphPoint)
+    Dim SeuilDebut As New ObservableCollection(Of GraphPoint)
+    Dim SeuilFinal As New ObservableCollection(Of GraphPoint)
     Dim Timeline As New List(Of Line)
     Dim listtemp As New List(Of Label)
     Dim Br As New List(Of Brush) 'couleur des voies EEG
@@ -14,11 +18,14 @@ Class MainWindow
     Dim liste_voie As New List(Of VoieEEG)
     Dim graph As New List(Of ObservableCollection(Of GraphPoint))
     Dim prd As New PrintDocument()
+    Dim nT6Array1 As New List(Of Double)
+    Dim Dureemax As Integer
+    Dim verticale As New List(Of Integer)
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
         comboBox1.Items.Add("Bande Delta")
         comboBox1.Items.Add("Bande Theta")
         comboBox1.Items.Add("Bande Alpha")
-        comboBox1.Items.Add("Bande Beta")
+        comboBox1.Items.Add("Bande 4-10 Hz")
         Initialiser()
         '''''Bouton pour injecter le fichier Excel
     End Sub
@@ -52,7 +59,8 @@ Class MainWindow
 
         For i As Integer = 1 To 11
             Canvas1.Children.Add(liste_voie(i - 1).Label1)
-            Canvas.SetTop(liste_voie(i - 1).Label1, liste_voie(i - 1).Vert_pos)
+            verticale.Add(liste_voie(i - 1).Vert_pos)
+            Canvas.SetTop(liste_voie(i - 1).Label1, verticale(i - 1))
             Canvas.SetLeft(liste_voie(i - 1).Label1, liste_voie(i - 1).Hor_pos)
         Next
         ' lignes représentant le temps /100s
@@ -109,8 +117,23 @@ Class MainWindow
         Canvas.SetLeft(MyChart, (B / 4) * 2)
         Canvas.SetLeft(labelduree, 20)
         Canvas.SetTop(labelduree, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55)
+        Canvas.SetTop(Lbldeb, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55 + 40)
+        Canvas.SetLeft(Lbldeb, 20)
+        Canvas.SetTop(Txtbxdeb, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55 + 40)
+        Canvas.SetLeft(Txtbxdeb, 20 + Lbldeb.ActualWidth)
+        Txtbxdeb.IsEnabled = False
+        Txtbxdeb.Text = "0"
+        Canvas.SetTop(Lblfin, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55 + 40 + 40)
+        Canvas.SetLeft(Lblfin, 20)
+        Canvas.SetTop(Txtfin, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55 + 40 + 42)
+        Canvas.SetLeft(Txtfin, 20 + Lblfin.ActualWidth)
+        Txtfin.IsEnabled = False
+        Txtfin.Text = ""
         Canvas.SetLeft(nbint, 20 + labelduree.ActualWidth)
-        Canvas.SetTop(nbint, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55)
+        Canvas.SetTop(nbint, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 60)
+        Canvas.SetTop(buttonCrise, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55 + 40 + 40 + 40)
+        Canvas.SetLeft(buttonCrise, 20)
+        buttonCrise.IsEnabled = False
     End Sub
     Private Sub Boutonchoix_Click(sender As Object, e As RoutedEventArgs) Handles Boutonchoix.Click
         Choice()
@@ -121,12 +144,16 @@ Class MainWindow
         If nResultOFD = True Then
             textBox1.Text = nOFD.FileName
             readExcelFile()
-            MsgBox(ListofArray(2)(2)(0))
+            Dureemax = nT6Array1.Count
+            Txtfin.Text = Dureemax
+            Txtfin.IsEnabled = True
+            Txtbxdeb.IsEnabled = True
+            buttonCrise.IsEnabled = True
         End If
     End Sub
     Private Sub readExcelFile()
         Dim nO1Array, nT5Array, nC3Array, nF7Array, nFp1Array, nCzArray, nO2array, nT6Array, nC4Array, nF8Array, nFp2Array As New List(Of Double)
-        Dim nO1Array1, nT5Array1, nC3Array1, nF7Array1, nFp1Array1, nCzArray1, nO2array1, nT6Array1, nC4Array1, nF8Array1, nFp2Array1 As New List(Of Double)
+        Dim nO1Array1, nT5Array1, nC3Array1, nF7Array1, nFp1Array1, nCzArray1, nO2array1, nC4Array1, nF8Array1, nFp2Array1 As New List(Of Double)
         Dim nO1Array2, nT5Array2, nC3Array2, nF7Array2, nFp1Array2, nCzArray2, nO2array2, nT6Array2, nC4Array2, nF8Array2, nFp2Array2 As New List(Of Double)
         Dim nO1Array3, nT5Array3, nC3Array3, nF7Array3, nFp1Array3, nCzArray3, nO2array3, nT6Array3, nC4Array3, nF8Array3, nFp2Array3 As New List(Of Double)
         Dim nO1Array4, nT5Array4, nC3Array4, nF7Array4, nFp1Array4, nCzArray4, nO2array4, nT6Array4, nC4Array4, nF8Array4, nFp2Array4 As New List(Of Double)
@@ -310,6 +337,7 @@ Class MainWindow
             "s", Floor((13 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((14 * ListofArray(Itembande)(1).Count) / 15) & "s"}
             For itime As Integer = 1 To 15
                 listtemp(itime - 1).Content = temps(itime - 1)
+                listtemp(itime - 1).FontSize = 22
             Next
             ISeuil = Convert.ToInt32(textBoxSeuil.Text)
             Maxi = 0
@@ -360,12 +388,13 @@ Class MainWindow
                     Case Else
                         Coef = 0.05
                 End Select
-                For itemps As Integer = 1 To Nbinterval
-                    Serie.Add((New GraphPoint() With {.PxNum = itemps * tinterval, .Puissance_spectrale = tableau(itemps, iVoie - 1)}))
+                MsgBox(Nbinterval + 1)
+                For itemps As Integer = 1 To Nbinterval + 1
+                    Serie.Add((New GraphPoint() With {.PxNum = itemps * tinterval, .Puissance_spectrale = tableau(itemps - 1, iVoie - 1)}))
                     Dim Intervall = New Rectangle()
                     liste_voie(iVoie - 1).Interval.Add(Intervall)
-                    If tableau(itemps, iVoie - 1) > ISeuil Then
-                        liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps, iVoie - 1) * 100) / Maxi
+                    If tableau(itemps - 1, iVoie - 1) > ISeuil Then
+                        liste_voie(iVoie - 1).Interval(itemps - 1).Height = (tableau(itemps - 1, iVoie - 1) * 100) / Maxi
                     Else
                         liste_voie(iVoie - 1).Interval(itemps - 1).Height = 0
                     End If
@@ -385,10 +414,16 @@ Class MainWindow
             Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
             Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = Deb}))
             graph.Add(Seuil2)
+            SeuilDebut.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = 100000}))
+            SeuilDebut.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = 10000}))
+            graph.Add(SeuilDebut)
             Tracer()
         End If
     End Sub
     Private Sub Tracer()
+
+        Seuildeb.DataContext = graph(12)
+        Seuil1.Background = Brushes.DarkGray
         Seuil1.DataContext = graph(11)
         Seuil1.Background = Brushes.Black
         Seuil1.Opacity = 100
@@ -425,6 +460,7 @@ Class MainWindow
         F7line.Opacity = 100
         T5line.Opacity = 100
         O1line.Opacity = 100
+        MsgBox(AxeY.Maximum)
     End Sub
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
@@ -475,6 +511,29 @@ Class MainWindow
         O1line.Opacity = 0
         Initialiser()
         Choice()
+    End Sub
+    Private Sub buttonCrise_Click(sender As Object, e As RoutedEventArgs) Handles buttonCrise.Click
+        Dim debut, final As Integer
+        Try
+            debut = Txtbxdeb.Text
+            final = Txtfin.Text
+            If final > Dureemax Or debut < 0 Then
+                MsgBox("Le chiffre entré est plus important que la durée du tracée" & Chr(10) & "Merci d'en entrer un autre", MsgBoxStyle.Critical, "Erreur Critique")
+            Else
+                For iVoie As Integer = 1 To 11
+                    For itemps As Integer = 1 To Nbinterval + 1
+                        If itemps < debut Or itemps > final Then
+                            liste_voie(iVoie - 1).Interval(itemps - 1).Visibility = True
+                        Else
+                            liste_voie(iVoie - 1).Interval(itemps - 1).Visibility = False
+                        End If
+                    Next
+                Next
+            End If
+        Catch ex As Exception
+            MsgBox("un nombre entier est attendu" & Chr(10) & "Merci d'en entrer un", MsgBoxStyle.Critical, "Erreur Critique")
+        End Try
+
     End Sub
 End Class
 

@@ -56,11 +56,13 @@
                             Orientation="X"
                             Title="temps en secondes"
                             ShowGridLines="True" />
-                <Toolkit:LinearAxis
+                <Toolkit:LinearAxis x:Name="AxeY"
                                 Orientation="Y"
                                 Title="Puissance spectrale"
                                 ShowGridLines="False"/>
             </Toolkit:Chart.Axes>
+            <Toolkit:LineSeries x:Name="Seuildeb"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
+            <Toolkit:LineSeries x:Name="Seuilfin"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
             <Toolkit:LineSeries x:Name="Seuil1"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
             <Toolkit:LineSeries x:Name="Fp2line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
             <Toolkit:LineSeries x:Name="C4line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}" Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
@@ -74,10 +76,15 @@
             <Toolkit:LineSeries x:Name="T5line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
             <Toolkit:LineSeries x:Name="O1line"  DependentValuePath="Puissance_spectrale" IndependentValuePath="PxNum" ItemsSource="{Binding}"  Grid.IsSharedSizeScope="True" DataPointStyle="{StaticResource InvisibleDataPoint}"/>
         </Toolkit:Chart>
-        <TextBox x:Name="nbint" Height="30" Canvas.Left="153" TextWrapping="Wrap" Text="1" Canvas.Top="397" Width="30"/>
+        <TextBox x:Name="nbint" Height="21" Canvas.Left="153" TextWrapping="Wrap" Text="1" Canvas.Top="397" Width="30"/>
         <Label x:Name="labelduree" Content="Durée de l'interval en seconde" Height="30" Canvas.Left="319" Canvas.Top="397" Width="179" IsEnabled="False"/>
         <Button x:Name="buttonimp" Content="imprimer la fenêtre" Height="26" Canvas.Left="-121" Canvas.Top="569" Width="158"/>
         <Button x:Name="buttonchange" Content="Changer de fichier" Height="27" Canvas.Left="-235" Canvas.Top="465" Width="172"/>
         <CheckBox x:Name="checkBox" Content="CheckBox" Canvas.Left="-333" Canvas.Top="371"/>
+        <TextBox x:Name="Txtbxdeb" Height="23" TextWrapping="Wrap" Text="TextBox" Width="55" Canvas.Left="10" Canvas.Top="104"/>
+        <Label x:Name="Lbldeb" Content="Début de la crise" Canvas.Left="285" Canvas.Top="446"/>
+        <Label x:Name="Lblfin" Content="Fin de la crise" Canvas.Left="95" Canvas.Top="446"/>
+        <TextBox x:Name="Txtfin" Height="23" Canvas.Left="95" TextWrapping="Wrap" Text="TextBox" Canvas.Top="371" Width="55"/>
+        <Button x:Name="buttonCrise" Content="Resize seizure" Canvas.Left="-179" Canvas.Top="347" Width="116"/>
     </Canvas>
 </Window>

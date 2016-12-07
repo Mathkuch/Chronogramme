@@ -29,7 +29,7 @@
         Hor_int_pos = 70
         Nom = nomVoie(i - 1)
         label.Content = nomVoie(i - 1)
-        label.FontSize = 14
+        label.FontSize = 22
         label.FontWeight = FontWeights.Bold
         Label1 = label
     End Sub
