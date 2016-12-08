@@ -5,7 +5,7 @@ Imports System.Math
 Imports System.Drawing.Printing
 Imports System.Printing
 Class MainWindow
-    Dim Nbinterval, Hauteurfen, B, marge, Lfenetre, Vert(11), Max As Integer
+    Dim Nbinterval, Hauteurfen, B, marge, Lfenetre, Vert(11), Max, Maxfin As Integer
     Dim Seuil2 As New ObservableCollection(Of GraphPoint)
     Dim SeuilDebut As New ObservableCollection(Of GraphPoint)
     Dim SeuilFinal As New ObservableCollection(Of GraphPoint)
@@ -341,15 +341,15 @@ Class MainWindow
         Dim Itembande As Integer
         Dim ISeuil As Integer
         Dim Coef As Double
-        ' Try
-        debut = Txtbxdeb.Text
-        final = Txtfin.Text
-        temps = {0 & "s", Floor(ListofArray(Itembande)(1).Count / 15) & "s", Floor((2 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((3 * ListofArray(Itembande)(1).Count) / 15) &
+        Try
+            debut = Txtbxdeb.Text
+            final = Txtfin.Text
+            temps = {0 & "s", Floor(ListofArray(Itembande)(1).Count / 15) & "s", Floor((2 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((3 * ListofArray(Itembande)(1).Count) / 15) &
             "s", Floor((4 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((5 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((6 * ListofArray(Itembande)(1).Count) / 15) &
             "s", Floor((7 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((8 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((9 * ListofArray(Itembande)(1).Count) / 15) &
             "s", Floor((10 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((11 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((12 * ListofArray(Itembande)(1).Count) / 15) &
             "s", Floor((13 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((14 * ListofArray(Itembande)(1).Count) / 15) & "s"}
-        For itime As Integer = 1 To 15
+            For itime As Integer = 1 To 15
                 listtemp(itime - 1).Content = temps(itime - 1)
                 listtemp(itime - 1).FontSize = 22
             Next
@@ -369,8 +369,8 @@ Class MainWindow
             Else
                 Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
             End If
-        Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, Nbvoie)
-        For xtab As Integer = 0 To Nbvoie - 1
+            Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, Nbvoie)
+            For xtab As Integer = 0 To Nbvoie - 1
                 For imoy As Integer = 1 To Nbinterval
                     Somme = 0
                     For itot = 0 To (tinterval - 1)
@@ -386,13 +386,13 @@ Class MainWindow
                 MsgBox("Merci de choisir un fichier Excel avant de demander le chronogramme")
                 Exit Sub
             End If
-        If Seuil2.Count > 0 Then
-            SeuilDebut.Clear()
-            SeuilFinal.Clear()
-            Seuil2.Clear()
-            graph.Clear()
-        End If
-        For iVoie = 1 To Nbvoie
+            If Seuil2.Count > 0 Then
+                SeuilDebut.Clear()
+                SeuilFinal.Clear()
+                Seuil2.Clear()
+                graph.Clear()
+            End If
+            For iVoie = 1 To Nbvoie
                 Dim Serie As New ObservableCollection(Of GraphPoint)
                 Select Case tinterval
                     Case 1
@@ -417,12 +417,12 @@ Class MainWindow
                     liste_voie(iVoie - 1).Interval(itemps - 1).Width = CInt(((Lfenetre * 15) / Nbinterval) - Coef * CInt((Lfenetre * 15 / Nbinterval)))
                     liste_voie(iVoie - 1).Interval(itemps - 1).Stroke = liste_voie(iVoie - 1).Color
                     liste_voie(iVoie - 1).Interval(itemps - 1).StrokeThickness = 2
-                liste_voie(iVoie - 1).Interval(itemps - 1).Fill = liste_voie(iVoie - 1).Color
-                Canvas1.Children.Add(liste_voie(iVoie - 1).Interval(itemps - 1))
-                Canvas.SetLeft(Intervall, 70 + CInt((Lfenetre * 15 / Nbinterval) * (itemps - 1) + Coef * CInt((Lfenetre * 15 / Nbinterval))))
-                Canvas.SetTop(Intervall, verticale(iVoie - 1) + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
-                nettoyage(iVoie, itemps)
-            Next
+                    liste_voie(iVoie - 1).Interval(itemps - 1).Fill = liste_voie(iVoie - 1).Color
+                    Canvas1.Children.Add(liste_voie(iVoie - 1).Interval(itemps - 1))
+                    Canvas.SetLeft(Intervall, 70 + CInt((Lfenetre * 15 / Nbinterval) * (itemps - 1) + Coef * CInt((Lfenetre * 15 / Nbinterval))))
+                    Canvas.SetTop(Intervall, verticale(iVoie - 1) + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
+                    nettoyage(iVoie, itemps)
+                Next
                 graph.Add(Serie)
             Next
             Dim Deb As Int32
@@ -432,21 +432,21 @@ Class MainWindow
             graph.Add(Seuil2)
             While graph.Count < 12
                 graph.Add(Seuil2)
-        End While
-        Dim iii As Integer
-        Max = 0
-        For imoye As Integer = 1 To Nbinterval
-            For iii = 0 To Nbvoie - 1
-                If tableau(imoye, iii) > Max Then
-                    Max = tableau(imoye, iii)
-                End If
+            End While
+            Dim iii As Integer
+            Max = 0
+            For imoye As Integer = 1 To Nbinterval
+                For iii = 0 To Nbvoie - 1
+                    If tableau(imoye, iii) > Max Then
+                        Max = tableau(imoye, iii)
+                    End If
+                Next
             Next
-        Next
 
-        Tracer()
-            ' Catch ex As Exception
-        '      MsgBox("Le nom de fichier n'est pas un fichier excel valide." & Chr(10) & "Merci d'en choisir un valide", MsgBoxStyle.Critical, "Erreur Critique")
-        ' End Try
+            Tracer()
+        Catch ex As Exception
+            MsgBox("Le nom de fichier n'est pas un fichier excel valide." & Chr(10) & "Merci d'en choisir un valide", MsgBoxStyle.Critical, "Erreur Critique")
+        End Try
     End Sub
     Private Sub Tracer()
         Try
@@ -559,11 +559,16 @@ Class MainWindow
     End Sub
     Private Sub buttonCrise_Click(sender As Object, e As RoutedEventArgs) Handles buttonCrise.Click
         Try
+
             debut = Txtbxdeb.Text
             final = Txtfin.Text
-            SeuilFinal.Clear()
-            SeuilDebut.Clear()
-            chrono()
+            If final <= Dureemax Then
+                SeuilFinal.Clear()
+                SeuilDebut.Clear()
+                chrono()
+            Else
+                Error 1
+            End If
         Catch ex As Exception
             Dim A, B As String
             A = IsNumeric(Txtbxdeb.Text)
