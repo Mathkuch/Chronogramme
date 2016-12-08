@@ -24,10 +24,10 @@
         br.Add(Brushes.DarkSlateBlue)
         br.Add(Brushes.Black)
         If (nbVoie2 Mod 2) <> 0 Then
-            If Math.Round(nbVoie2 / 2, 0) Then
-                Color = br(5)
-            ElseIf i < nbVoie2 / 2 Then
+            If i < Int((nbVoie2) / 2) + 1 Then
                 Color = br(i - 1)
+            ElseIf i = Int((nbVoie2) / 2) + 1 Then
+                Color = br(5)
             ElseIf i <= nbVoie2 Then
                 Color = br(i - nbVoie2 / 2 + 5 - 1)
             Else
@@ -36,7 +36,7 @@
         Else
             If i <= nbVoie2 / 2 Then
                 Color = br(i)
-            ElseIf i <= nbVoie2 Then
+            ElseIf i <= nbVoie2 + 1 Then
                 Color = br(i - nbVoie2 / 2 + 5)
             Else
                 Color = br(11)

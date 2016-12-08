@@ -119,8 +119,8 @@ Class MainWindow
         Canvas.SetLeft(textBoxSeuil, 20 + 140 + 20)
         textBoxSeuil.Width = 90
         MyChart.Width = B / 2 - 40
-        MyChart.Height = marge - 55
-        Canvas.SetTop(MyChart, (((Hauteurfen - marge) / 11) * 11 + 25))
+        MyChart.Height = windows1.ActualHeight - (buttonchange.ActualHeight + 15 + (((Hauteurfen - marge) / 11) * 11 + 25 + 30)) - 10
+        Canvas.SetTop(MyChart, (buttonchange.ActualHeight + 15 + (((Hauteurfen - marge) / 11) * 11 + 25 + 30)))
         Canvas.SetLeft(MyChart, (B / 4) * 2)
         Canvas.SetLeft(labelduree, 20)
         Canvas.SetTop(labelduree, (((Hauteurfen - marge) / 11) * 11 + 25 + 30) + 75 + 55)
@@ -508,7 +508,7 @@ Class MainWindow
     End Sub
     Private Sub buttonchange_Click(sender As Object, e As RoutedEventArgs) Handles buttonchange.Click
         If Nbinterval <> 0 Then
-            For iVoie = 1 To 11
+            For iVoie = 1 To Nbvoie
                 Canvas1.Children.Remove(liste_voie(iVoie - 1).Label1)
                 For itemps As Integer = 1 To Nbinterval
                     Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
@@ -526,6 +526,23 @@ Class MainWindow
         Timeline.Clear()
         ListofArray.Clear()
         Seuil2.Clear()
+        SeuilDebut.Clear()
+        Br.Clear
+        Nbvoie = 0
+        verticale.Clear
+        liste_voie2.Clear()
+
+        SeuilFinal.Clear
+
+
+
+
+
+
+
+
+
+
         Seuil1.Opacity = 0
         Fp2line.Opacity = 0
         C4line.Opacity = 0
@@ -538,7 +555,6 @@ Class MainWindow
         F7line.Opacity = 0
         T5line.Opacity = 0
         O1line.Opacity = 0
-        Initialiser()
         Choice()
     End Sub
     Private Sub buttonCrise_Click(sender As Object, e As RoutedEventArgs) Handles buttonCrise.Click
