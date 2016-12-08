@@ -21,30 +21,35 @@ Class MainWindow
     Dim nT6Array1 As New List(Of Double)
     Dim Dureemax As Integer
     Dim verticale As New List(Of Integer)
+    Dim debut, final As Integer
+    Dim liste_voie2 As New List(Of String)
+    Dim Nbvoie As Integer
     Private Sub windows1_Loaded(sender As Object, e As RoutedEventArgs) Handles windows1.Loaded
         comboBox1.Items.Add("Bande Delta")
         comboBox1.Items.Add("Bande Theta")
         comboBox1.Items.Add("Bande Alpha")
-        comboBox1.Items.Add("Bande 4-10 Hz")
-        Initialiser()
-        '''''Bouton pour injecter le fichier Excel
-    End Sub
-    Private Sub Initialiser()
+        comboBox1.Items.Add("Bande Beta")
         B = windows1.ActualWidth
         Hauteurfen = windows1.ActualHeight
         marge = 450
+        Panneau_Commande()
+
+        '''''Bouton pour injecter le fichier Excel
+    End Sub
+    Private Sub Initialiser()
         ' Initialisation des voie
-        Dim Fp2 As New VoieEEG(1, Hauteurfen, marge)
-        Dim C4 As New VoieEEG(2, Hauteurfen, marge)
-        Dim f8 As New VoieEEG(3, Hauteurfen, marge)
-        Dim T6 As New VoieEEG(4, Hauteurfen, marge)
-        Dim O2 As New VoieEEG(5, Hauteurfen, marge)
-        Dim cz As New VoieEEG(6, Hauteurfen, marge)
-        Dim fp1 As New VoieEEG(7, Hauteurfen, marge)
-        Dim c3 As New VoieEEG(8, Hauteurfen, marge)
-        Dim f7 As New VoieEEG(9, Hauteurfen, marge)
-        Dim t5 As New VoieEEG(10, Hauteurfen, marge)
-        Dim o1 As New VoieEEG(11, Hauteurfen, marge)
+        Dim Vert_pos As Integer
+        Dim Fp2 As New VoieEEG(1, Hauteurfen, marge, Nbvoie)
+        Dim C4 As New VoieEEG(2, Hauteurfen, marge, Nbvoie)
+        Dim f8 As New VoieEEG(3, Hauteurfen, marge, Nbvoie)
+        Dim T6 As New VoieEEG(4, Hauteurfen, marge, Nbvoie)
+        Dim O2 As New VoieEEG(5, Hauteurfen, marge, Nbvoie)
+        Dim cz As New VoieEEG(6, Hauteurfen, marge, Nbvoie)
+        Dim fp1 As New VoieEEG(7, Hauteurfen, marge, Nbvoie)
+        Dim c3 As New VoieEEG(8, Hauteurfen, marge, Nbvoie)
+        Dim f7 As New VoieEEG(9, Hauteurfen, marge, Nbvoie)
+        Dim t5 As New VoieEEG(10, Hauteurfen, marge, Nbvoie)
+        Dim o1 As New VoieEEG(11, Hauteurfen, marge, Nbvoie)
         liste_voie.Add(Fp2)
         liste_voie.Add(C4)
         liste_voie.Add(f8)
@@ -57,9 +62,11 @@ Class MainWindow
         liste_voie.Add(t5)
         liste_voie.Add(o1)
 
-        For i As Integer = 1 To 11
+        For i As Integer = 1 To Nbvoie
+            liste_voie(i - 1).Label1.Content = liste_voie2(Nbvoie - i)
             Canvas1.Children.Add(liste_voie(i - 1).Label1)
-            verticale.Add(liste_voie(i - 1).Vert_pos)
+            Vert_pos = 50 + ((Hauteurfen - marge) / liste_voie2.Count) * (i - 1)
+            verticale.Add(Vert_pos)
             Canvas.SetTop(liste_voie(i - 1).Label1, verticale(i - 1))
             Canvas.SetLeft(liste_voie(i - 1).Label1, liste_voie(i - 1).Hor_pos)
         Next
@@ -82,7 +89,7 @@ Class MainWindow
             Timeline(iline - 1).StrokeThickness = 0.5
             Canvas1.Children.Add(Timeline(iline - 1))
         Next
-        Panneau_Commande()
+
     End Sub
     Private Sub Panneau_Commande()
         Boutonchoix.Content = "Choisir un fichier excel"
@@ -141,9 +148,13 @@ Class MainWindow
     Private Sub Choice()
         Dim nOFD As New Microsoft.Win32.OpenFileDialog()
         Dim nResultOFD As Nullable(Of Boolean) = nOFD.ShowDialog()
+        Dim Nawras As String
+        Nawras = ""
         If nResultOFD = True Then
             textBox1.Text = nOFD.FileName
             readExcelFile()
+            Nbvoie = liste_voie2.Count
+            Initialiser()
             Dureemax = nT6Array1.Count
             Txtfin.Text = Dureemax
             Txtfin.IsEnabled = True
@@ -169,6 +180,12 @@ Class MainWindow
         Dim nRange As Excel.Range = nWorksheet.UsedRange
         Dim nArray(,) As Object = nRange.Value(Excel.XlRangeValueDataType.xlRangeValueDefault)
         Dim nSize As Integer = nArray.GetUpperBound(0)
+        Dim j As Integer
+        j = 2
+        While nArray(1, j) <> "" And nArray(1, j) <> "Somme"
+            liste_voie2.Add(nArray(1, j))
+            j = j + 1
+        End While
         For i As Integer = 2 To nSize
             nO1Array.Add(nArray(i, Loca + 1))
             nT5Array.Add(nArray(i, Loca + 2))
@@ -327,9 +344,7 @@ Class MainWindow
         Dim Itembande As Integer
         Dim ISeuil As Integer
         Dim Coef As Double
-        If textBox1.Text = "Fichier Excel de travail" Then
-            MsgBox("Choisir d'abord un fichier excel")
-        Else
+        Try
             temps = {0 & "s", Floor(ListofArray(Itembande)(1).Count / 15) & "s", Floor((2 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((3 * ListofArray(Itembande)(1).Count) / 15) &
             "s", Floor((4 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((5 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((6 * ListofArray(Itembande)(1).Count) / 15) &
             "s", Floor((7 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((8 * ListofArray(Itembande)(1).Count) / 15) & "s", Floor((9 * ListofArray(Itembande)(1).Count) / 15) &
@@ -344,7 +359,7 @@ Class MainWindow
             tinterval = Convert.ToInt32(nbint.Text)
             Itembande = comboBox1.SelectedIndex
             If Nbinterval <> 0 Then
-                For iVoie = 1 To 11
+                For iVoie = 1 To Nbvoie
                     For itemps As Integer = 1 To Nbinterval
                         Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
                     Next
@@ -355,12 +370,12 @@ Class MainWindow
             Else
                 Nbinterval = (Int(ListofArray(Itembande)(1).Count / tinterval) - 1)
             End If
-            Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, 11)
-            For xtab As Integer = 0 To 10
+            Dim tableau(Int(ListofArray(Itembande)(1).Count / tinterval) - 1, Nbvoie)
+            For xtab As Integer = 0 To Nbvoie - 1
                 For imoy As Integer = 1 To Nbinterval
                     Somme = 0
                     For itot = 0 To (tinterval - 1)
-                        Somme = Somme + ListofArray(Itembande)(xtab)((imoy * tinterval) + itot)
+                        Somme = Somme + ListofArray(Itembande)(xtab + 11 - Nbvoie)((imoy * tinterval) + itot)
                     Next
                     tableau(imoy, xtab) = Int(Somme / tinterval)
                     If Maxi < Int(Somme / tinterval) Then
@@ -376,7 +391,7 @@ Class MainWindow
                 Seuil2.Clear()
                 graph.Clear()
             End If
-            For iVoie = 1 To 11
+            For iVoie = 1 To Nbvoie
                 Dim Serie As New ObservableCollection(Of GraphPoint)
                 Select Case tinterval
                     Case 1
@@ -388,7 +403,6 @@ Class MainWindow
                     Case Else
                         Coef = 0.05
                 End Select
-                MsgBox(Nbinterval + 1)
                 For itemps As Integer = 1 To Nbinterval + 1
                     Serie.Add((New GraphPoint() With {.PxNum = itemps * tinterval, .Puissance_spectrale = tableau(itemps - 1, iVoie - 1)}))
                     Dim Intervall = New Rectangle()
@@ -405,7 +419,7 @@ Class MainWindow
                     liste_voie(iVoie - 1).Interval(itemps - 1).Fill = liste_voie(iVoie - 1).Color
                     Canvas1.Children.Add(liste_voie(iVoie - 1).Interval(itemps - 1))
                     Canvas.SetLeft(Intervall, 70 + CInt((Lfenetre * 15 / Nbinterval) * (itemps - 1) + Coef * CInt((Lfenetre * 15 / Nbinterval))))
-                    Canvas.SetTop(Intervall, liste_voie(iVoie - 1).Vert_pos + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
+                    Canvas.SetTop(Intervall, verticale(iVoie - 1) + liste_voie(2).Label1.ActualHeight / 2 - (liste_voie(iVoie - 1).Interval(itemps - 1).Height) / 2)
                 Next
                 graph.Add(Serie)
             Next
@@ -414,53 +428,68 @@ Class MainWindow
             Seuil2.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = Deb}))
             Seuil2.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = Deb}))
             graph.Add(Seuil2)
-            SeuilDebut.Add((New GraphPoint() With {.PxNum = 0, .Puissance_spectrale = 100000}))
-            SeuilDebut.Add((New GraphPoint() With {.PxNum = graph(0).Count * tinterval, .Puissance_spectrale = 10000}))
-            graph.Add(SeuilDebut)
+            While graph.Count < 12
+                graph.Add(Seuil2)
+            End While
             Tracer()
-        End If
+        Catch ex As Exception
+            MsgBox("Le nom de fichier n'est pas un fichier excel valide." & Chr(10) & "Merci d'en choisir un valide", MsgBoxStyle.Critical, "Erreur Critique")
+        End Try
     End Sub
     Private Sub Tracer()
+        Try
 
-        Seuildeb.DataContext = graph(12)
-        Seuil1.Background = Brushes.DarkGray
-        Seuil1.DataContext = graph(11)
-        Seuil1.Background = Brushes.Black
-        Seuil1.Opacity = 100
-        Fp2line.DataContext = graph(0)
-        Fp2line.Background = liste_voie(0).Color
-        F8line.DataContext = graph(1)
-        F8line.Background = liste_voie(1).Color
-        C4line.DataContext = graph(2)
-        C4line.Background = liste_voie(2).Color
-        T6line.DataContext = graph(3)
-        T6line.Background = liste_voie(3).Color
-        O2line.DataContext = graph(4)
-        O2line.Background = liste_voie(4).Color
-        Czline.DataContext = graph(5)
-        Czline.Background = liste_voie(5).Color
-        Fp1line.DataContext = graph(6)
-        Fp1line.Background = liste_voie(6).Color
-        F7line.DataContext = graph(7)
-        F7line.Background = liste_voie(7).Color
-        C3line.DataContext = graph(8)
-        C3line.Background = liste_voie(8).Color
-        T5line.DataContext = graph(9)
-        T5line.Background = liste_voie(9).Color
-        O1line.DataContext = graph(10)
-        O1line.Background = liste_voie(10).Color
-        Fp2line.Opacity = 100
-        C4line.Opacity = 100
-        F8line.Opacity = 100
-        T6line.Opacity = 100
-        O2line.Opacity = 100
-        Czline.Opacity = 100
-        Fp1line.Opacity = 100
-        C3line.Opacity = 100
-        F7line.Opacity = 100
-        T5line.Opacity = 100
-        O1line.Opacity = 100
-        MsgBox(AxeY.Maximum)
+            Fp2line.DataContext = graph(0)
+            Fp2line.Background = liste_voie(0).Color
+            F8line.DataContext = graph(1)
+            F8line.Background = liste_voie(1).Color
+            C4line.DataContext = graph(2)
+            C4line.Background = liste_voie(2).Color
+            T6line.DataContext = graph(3)
+            T6line.Background = liste_voie(3).Color
+            O2line.DataContext = graph(4)
+            O2line.Background = liste_voie(4).Color
+            Czline.DataContext = graph(5)
+            Czline.Background = liste_voie(5).Color
+            Fp1line.DataContext = graph(6)
+            Fp1line.Background = liste_voie(6).Color
+            F7line.DataContext = graph(7)
+            F7line.Background = liste_voie(7).Color
+            C3line.DataContext = graph(8)
+            C3line.Background = liste_voie(8).Color
+            T5line.DataContext = graph(9)
+            T5line.Background = liste_voie(9).Color
+            O1line.DataContext = graph(10)
+            O1line.Background = liste_voie(10).Color
+            Fp2line.Opacity = 100
+            C4line.Opacity = 100
+            F8line.Opacity = 100
+            T6line.Opacity = 100
+            O2line.Opacity = 100
+            Czline.Opacity = 100
+            Fp1line.Opacity = 100
+            C3line.Opacity = 100
+            F7line.Opacity = 100
+            T5line.Opacity = 100
+            O1line.Opacity = 100
+            Seuil1.DataContext = graph(11)
+            Seuil1.Background = Brushes.Black
+            Seuil1.Opacity = 100
+            SeuilDebut.Add((New GraphPoint() With {.PxNum = debut, .Puissance_spectrale = 0}))
+            SeuilDebut.Add((New GraphPoint() With {.PxNum = debut, .Puissance_spectrale = AxeY.ActualMaximum}))
+            graph.Add(SeuilDebut)
+            Seuildeb.DataContext = graph(12)
+            Seuildeb.Opacity = 100
+            Seuildeb.Background = Brushes.Indigo
+            SeuilFinal.Add((New GraphPoint() With {.PxNum = final, .Puissance_spectrale = 0}))
+            SeuilFinal.Add((New GraphPoint() With {.PxNum = final, .Puissance_spectrale = AxeY.ActualMaximum}))
+            graph.Add(SeuilFinal)
+            Seuilfin.DataContext = graph(13)
+            Seuilfin.Opacity = 100
+            Seuilfin.Background = Brushes.Indigo
+        Catch ex As Exception
+
+        End Try
     End Sub
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
         chrono()
@@ -513,14 +542,14 @@ Class MainWindow
         Choice()
     End Sub
     Private Sub buttonCrise_Click(sender As Object, e As RoutedEventArgs) Handles buttonCrise.Click
-        Dim debut, final As Integer
+
         Try
             debut = Txtbxdeb.Text
             final = Txtfin.Text
             If final > Dureemax Or debut < 0 Then
                 MsgBox("Le chiffre entré est plus important que la durée du tracée" & Chr(10) & "Merci d'en entrer un autre", MsgBoxStyle.Critical, "Erreur Critique")
             Else
-                For iVoie As Integer = 1 To 11
+                For iVoie As Integer = 1 To Nbvoie
                     For itemps As Integer = 1 To Nbinterval + 1
                         If itemps < debut Or itemps > final Then
                             liste_voie(iVoie - 1).Interval(itemps - 1).Visibility = True
@@ -529,6 +558,9 @@ Class MainWindow
                         End If
                     Next
                 Next
+                SeuilFinal.Clear()
+                SeuilDebut.Clear()
+                Tracer()
             End If
         Catch ex As Exception
             MsgBox("un nombre entier est attendu" & Chr(10) & "Merci d'en entrer un", MsgBoxStyle.Critical, "Erreur Critique")
