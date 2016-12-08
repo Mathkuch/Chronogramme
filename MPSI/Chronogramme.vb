@@ -4,8 +4,6 @@ Imports System.Collections.ObjectModel
 Imports System.Math
 Imports System.Drawing.Printing
 Imports System.Printing
-
-
 Class MainWindow
     Dim Nbinterval, Hauteurfen, B, marge, Lfenetre, Vert(11) As Integer
     Dim Seuil2 As New ObservableCollection(Of GraphPoint)
@@ -33,7 +31,6 @@ Class MainWindow
         Hauteurfen = windows1.ActualHeight
         marge = 450
         Panneau_Commande()
-
         '''''Bouton pour injecter le fichier Excel
     End Sub
     Private Sub Initialiser()
@@ -438,7 +435,6 @@ Class MainWindow
     End Sub
     Private Sub Tracer()
         Try
-
             Fp2line.DataContext = graph(0)
             Fp2line.Background = liste_voie(0).Color
             F8line.DataContext = graph(1)
@@ -488,7 +484,6 @@ Class MainWindow
             Seuilfin.Opacity = 100
             Seuilfin.Background = Brushes.Indigo
         Catch ex As Exception
-
         End Try
     End Sub
     Private Sub comboBox1_DropDownClosed(sender As Object, e As EventArgs) Handles comboBox1.DropDownClosed
@@ -527,22 +522,11 @@ Class MainWindow
         ListofArray.Clear()
         Seuil2.Clear()
         SeuilDebut.Clear()
-        Br.Clear
+        Br.Clear()
         Nbvoie = 0
-        verticale.Clear
+        verticale.Clear()
         liste_voie2.Clear()
-
-        SeuilFinal.Clear
-
-
-
-
-
-
-
-
-
-
+        SeuilFinal.Clear()
         Seuil1.Opacity = 0
         Fp2line.Opacity = 0
         C4line.Opacity = 0
@@ -558,7 +542,6 @@ Class MainWindow
         Choice()
     End Sub
     Private Sub buttonCrise_Click(sender As Object, e As RoutedEventArgs) Handles buttonCrise.Click
-
         Try
             debut = Txtbxdeb.Text
             final = Txtfin.Text
@@ -581,7 +564,6 @@ Class MainWindow
         Catch ex As Exception
             MsgBox("un nombre entier est attendu" & Chr(10) & "Merci d'en entrer un", MsgBoxStyle.Critical, "Erreur Critique")
         End Try
-
     End Sub
 End Class
 
