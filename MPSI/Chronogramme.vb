@@ -518,44 +518,48 @@ Class MainWindow
         End If
     End Sub
     Private Sub buttonchange_Click(sender As Object, e As RoutedEventArgs) Handles buttonchange.Click
-        If Nbinterval <> 0 Then
+        Try
+            If Nbinterval <> 0 Then
+                For itemps = 1 To 15
+                    Canvas1.Children.Remove(listtemp(itemps - 1))
+                    Canvas1.Children.Remove(Timeline(itemps - 1))
+                Next
+            End If
             For iVoie = 1 To Nbvoie
                 Canvas1.Children.Remove(liste_voie(iVoie - 1).Label1)
                 For itemps As Integer = 1 To Nbinterval
                     Canvas1.Children.Remove(liste_voie(iVoie - 1).Interval(itemps - 1))
                 Next
             Next
-            For itemps = 1 To 15
-                Canvas1.Children.Remove(listtemp(itemps - 1))
-                Canvas1.Children.Remove(Timeline(itemps - 1))
-            Next
-        End If
-        graph.Clear()
-        Nbinterval = 0
-        liste_voie.Clear()
-        listtemp.Clear()
-        Timeline.Clear()
-        ListofArray.Clear()
-        Seuil2.Clear()
-        SeuilDebut.Clear()
-        Br.Clear()
-        Nbvoie = 0
-        verticale.Clear()
-        liste_voie2.Clear()
-        SeuilFinal.Clear()
-        Seuil1.Opacity = 0
-        Fp2line.Opacity = 0
-        C4line.Opacity = 0
-        F8line.Opacity = 0
-        T6line.Opacity = 0
-        O2line.Opacity = 0
-        Czline.Opacity = 0
-        Fp1line.Opacity = 0
-        C3line.Opacity = 0
-        F7line.Opacity = 0
-        T5line.Opacity = 0
-        O1line.Opacity = 0
-        Choice()
+            graph.Clear()
+            Nbinterval = 0
+            liste_voie.Clear()
+            listtemp.Clear()
+            Timeline.Clear()
+            ListofArray.Clear()
+            Seuil2.Clear()
+            SeuilDebut.Clear()
+            Br.Clear()
+            Nbvoie = 0
+            verticale.Clear()
+            liste_voie2.Clear()
+            SeuilFinal.Clear()
+            Seuil1.Opacity = 0
+            Fp2line.Opacity = 0
+            C4line.Opacity = 0
+            F8line.Opacity = 0
+            T6line.Opacity = 0
+            O2line.Opacity = 0
+            Czline.Opacity = 0
+            Fp1line.Opacity = 0
+            C3line.Opacity = 0
+            F7line.Opacity = 0
+            T5line.Opacity = 0
+            O1line.Opacity = 0
+            Choice()
+        Catch ex As Exception
+            MsgBox("Utilisation aberrante du logiciel." & Chr(10) & "Merci de faire attention!!!", MsgBoxStyle.Critical, "Erreur Critique")
+        End Try
     End Sub
     Private Sub buttonCrise_Click(sender As Object, e As RoutedEventArgs) Handles buttonCrise.Click
         Try
